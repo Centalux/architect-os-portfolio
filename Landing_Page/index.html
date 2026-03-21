@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CENTALUX – THẤU CẢM | Nơi Kết Nối Trí Tuệ &amp; Trái Tim</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-container": "#f7d1a1",
+              "primary-dim": "#7b3d3e",
+              "surface": "#faf5f5",
+              "surface-container-high": "#e6e1e1",
+              "primary": "#89494a",
+              "surface-container-lowest": "#ffffff",
+              "inverse-primary": "#fba8a8",
+              "on-secondary": "#ebf3ff",
+              "primary-fixed": "#fba8a8",
+              "primary-container": "#fba8a8",
+              "surface-container": "#ece7e7",
+              "on-surface-variant": "#5d5b5b",
+              "secondary-container": "#abd6ff",
+              "outline-variant": "#b0acac",
+              "tertiary-fixed": "#f7d1a1",
+              "on-secondary-fixed": "#003758",
+              "surface-dim": "#d8d3d4",
+              "surface-bright": "#faf5f5",
+              "tertiary-fixed-dim": "#e9c394",
+              "on-primary": "#ffefee",
+              "error-container": "#f95630",
+              "on-surface": "#302e2f",
+              "on-primary-fixed-variant": "#6c3133",
+              "on-secondary-container": "#114b71",
+              "error-dim": "#b92902",
+              "on-secondary-fixed-variant": "#1f547b",
+              "surface-variant": "#e0dcdc",
+              "on-tertiary-fixed-variant": "#6a4f2a",
+              "primary-fixed-dim": "#ec9b9b",
+              "secondary-fixed-dim": "#99c9f5",
+              "on-primary-container": "#61292b",
+              "on-tertiary": "#fff0e2",
+              "error": "#b02500",
+              "on-error-container": "#520c00",
+              "on-error": "#ffefec",
+              "secondary": "#2c5f87",
+              "outline": "#797676",
+              "on-background": "#302e2f",
+              "background": "#faf5f5",
+              "tertiary": "#725631",
+              "surface-tint": "#89494a",
+              "surface-container-low": "#f5eff0",
+              "inverse-surface": "#0f0e0e",
+              "inverse-on-surface": "#9f9c9c",
+              "on-tertiary-container": "#604622",
+              "surface-container-highest": "#e0dcdc",
+              "secondary-dim": "#1d537a",
+              "on-primary-fixed": "#461417",
+              "secondary-fixed": "#abd6ff",
+              "on-tertiary-fixed": "#4b3311",
+              "tertiary-dim": "#654b26"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; color: #302e2f; background-color: #faf5f5; }
+        h1, h2, h3, h4 { font-family: 'Noto Serif', serif; }
+        .glass-nav { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); }
+        .hero-gradient { background: radial-gradient(circle at 50% 50%, #fba8a8 0%, #faf5f5 100%); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .active-nav-link { border-bottom: 2px solid #89494a; padding-bottom: 0.25rem; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-md">
+<div class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
+<div class="text-2xl font-serif font-bold text-[#89494a] dark:text-[#fba8a8]"><img alt="CENTALUX Logo" class="h-10 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ADBb0uibqLKdKLj4Uh8xcEwGnvYpiTCl3w9PbgdkpTuvngO1bOvGJ8lgy__bBWRONUmHVos5P4Nibvq2jfg7x4HZThZp0kIRvfsqDvqOXn6N5wsz6F-x6YkubHTqGyedpcncRDAG2Oa4zIyKebPV3Q45MoUqf_6beYtD1A25r4l_lC3ZCXuMrzfXhoDEvL3Xa7R1gDOqWSlYBYuPtqeZKEX8vhPY1xKoi4ugov6xj8DrKTF84QmS4oi6oCaGrAK4s_ScniUVT1Ra0SaX_w"/></div>
+<!-- Desktop Nav -->
+<div class="hidden md:flex items-center gap-8">
+<a class="text-zinc-600 dark:text-zinc-400 font-medium hover:text-[#89494a] transition-colors" href="#about">Về chúng tôi</a>
+<a class="text-zinc-600 dark:text-zinc-400 font-medium hover:text-[#89494a] transition-colors" href="#activities">Hoạt động</a>
+<a class="text-zinc-600 dark:text-zinc-400 font-medium hover:text-[#89494a] transition-colors" href="#benefits">Lợi ích</a>
+<a class="text-zinc-600 dark:text-zinc-400 font-medium hover:text-[#89494a] transition-colors" href="#testimonials">Cảm nhận</a>
+<a class="text-zinc-600 dark:text-zinc-400 font-medium hover:text-[#89494a] transition-colors" href="#team">Đội ngũ</a>
+<a class="text-zinc-600 dark:text-zinc-400 font-medium hover:text-[#89494a] transition-colors" href="#contact">Liên hệ</a>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-full font-semibold hover:scale-105 active:scale-95 transition-all shadow-sm">
+                Bắt đầu ngay
+            </button>
+</div>
+</nav>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative min-h-[921px] flex items-center overflow-hidden py-20 px-6">
+<div class="absolute inset-0 hero-gradient opacity-60 pointer-events-none"></div>
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+<div class="space-y-8">
+<h1 class="text-5xl md:text-7xl font-bold leading-tight tracking-tight text-on-surface">
+                        CENTALUX – Nơi Kết Nối <span class="text-primary italic">Trí Tuệ</span> &amp; Trái Tim
+                    </h1>
+<p class="text-xl md:text-2xl text-on-surface-variant leading-relaxed font-body max-w-xl">
+                        Khám phá cộng đồng chia sẻ tri thức, chữa lành và lan tỏa sự đồng cảm để cùng nhau phát triển.
+                    </p>
+<div class="flex flex-wrap gap-4">
+<button class="px-8 py-4 bg-primary text-on-primary rounded-full text-lg font-bold hover:scale-105 transition-transform shadow-lg">
+                            Tham gia cộng đồng ngay
+                        </button>
+<button class="px-8 py-4 bg-secondary-container text-on-secondary-container rounded-full text-lg font-bold hover:scale-105 transition-transform">
+                            Tìm hiểu thêm
+                        </button>
+</div>
+</div>
+<div class="relative group">
+<div class="absolute -inset-4 bg-primary-container/20 rounded-xl blur-2xl transform rotate-3"></div>
+<img alt="Community Connection" class="relative rounded-xl w-full h-[500px] object-cover shadow-2xl transition-transform duration-500 group-hover:scale-[1.01]" data-alt="Group of friends laughing warmly in sunset light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgdi8K_BhA44tJ5iH0BOAyvRAz0d1w-tHuuZb9aImmg4378rYTiZAPXFPYagoMu-9w7pp57AuRR568HDd2gDGaxGdr44wOjZN3kHh_FXoy5FcjftpImi24eJ7qclFIxwrdxZiTI9-nnk-7Y0B7j4BJ8l6_kCROKqEFR_3VZJM883_3wcCvJxEJU28VX9uRf__qu6mEbAOsnJY3Xj4iwvpvT-GCIp6L0nuEfnvjuygAhrwCNiLfHzDZrlHgdga5lfCrICSiXZeg4hVI"/>
+<div class="absolute -bottom-6 -left-6 bg-surface-container-lowest p-6 rounded-lg shadow-xl max-w-xs hidden md:block">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl">favorite</span>
+<p class="text-sm font-medium leading-tight">Hơn 5000+ thành viên đã tìm thấy sự an yên.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: Về CENTALUX -->
+<section class="py-24 bg-surface-container-low px-6" id="about">
+<div class="max-w-7xl mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+<div class="order-2 lg:order-1">
+<div class="relative rounded-xl overflow-hidden shadow-2xl aspect-video">
+<img alt="Meditation Session" class="w-full h-full object-cover" data-alt="Peaceful person meditating in a garden setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJ7ro_NSATvEiwSOOTcqozY9OsQ1IkdORfPoE6-96F0auyD8SnVPGB1Q_aI9e8kzKmKask7EYuCcXvYrkAjdN7cJ-dzjFIbBEWW8KF63CwLcA3kjGCRvoJ2bSS_i7WmRFXfLXVIczpz_K6sOQvUZLJr-9GryuC82iv7--3LFE3CorAbW9IwEpN9CJRiDQpUG0U5R6i1BvebkmY-wxnw_q8tz4gzMQVCL5Bj_49CDbU0_xrpoZ1ONx3SkbV3NXDIOKCx0vXnBifnIPL"/>
+<div class="absolute inset-0 bg-primary/20 flex items-center justify-center group cursor-pointer">
+<div class="w-20 h-20 bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-white text-5xl">play_arrow</span>
+</div>
+</div>
+</div>
+</div>
+<div class="order-1 lg:order-2 space-y-8">
+<h2 class="text-4xl md:text-5xl font-bold">Về CENTALUX</h2>
+<div class="space-y-6">
+<div class="p-8 bg-surface-container-lowest rounded-lg border-l-4 border-primary">
+<h3 class="text-2xl font-bold text-primary mb-2">Sứ mệnh</h3>
+<p class="text-lg text-on-surface-variant">Xây dựng một cộng đồng nơi mọi người được thấu hiểu, chia sẻ và cùng nhau phát triển bản thân.</p>
+</div>
+<div class="p-8 bg-surface-container-lowest rounded-lg border-l-4 border-secondary">
+<h3 class="text-2xl font-bold text-secondary mb-2">Tầm nhìn</h3>
+<p class="text-lg text-on-surface-variant">Trở thành một không gian an toàn, đầy tình thương, nơi lan tỏa những giá trị tích cực và chữa lành tâm hồn.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: Hoạt Động Cốt Lõi -->
+<section class="py-24 px-6 overflow-hidden" id="activities">
+<div class="max-w-7xl mx-auto text-center mb-16">
+<h2 class="text-4xl md:text-5xl font-bold mb-4">Khám Phá Các Hoạt Động Tại CENTALUX</h2>
+<div class="h-1 w-24 bg-primary mx-auto rounded-full"></div>
+</div>
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest p-10 rounded-xl hover:translate-y-[-8px] transition-transform duration-300">
+<div class="w-16 h-16 bg-primary-container rounded-full flex items-center justify-center mb-8">
+<span class="material-symbols-outlined text-on-primary-container text-3xl">auto_stories</span>
+</div>
+<h3 class="text-2xl font-bold mb-4">Chia sẻ tri thức</h3>
+<p class="text-on-surface-variant mb-6 leading-relaxed">
+                        Tham gia các buổi Workshops, seminars chuyên sâu về tâm lý học, kỹ năng mềm và phát triển tư duy.
+                    </p>
+<ul class="space-y-2 mb-8 text-sm font-medium">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">check_circle</span> Tâm lý học ứng dụng</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">check_circle</span> Kỹ năng thấu cảm</li>
+</ul>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest p-10 rounded-xl hover:translate-y-[-8px] transition-transform duration-300 border-2 border-primary/10">
+<div class="w-16 h-16 bg-secondary-container rounded-full flex items-center justify-center mb-8">
+<span class="material-symbols-outlined text-on-secondary-container text-3xl">spa</span>
+</div>
+<h3 class="text-2xl font-bold mb-4">Chữa lành</h3>
+<p class="text-on-surface-variant mb-6 leading-relaxed">
+                        Thiền định, Yoga, liệu pháp nghệ thuật và tư vấn tâm lý giúp bạn tìm lại sự cân bằng trong tâm hồn.
+                    </p>
+<ul class="space-y-2 mb-8 text-sm font-medium">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-lg">check_circle</span> Art Therapy</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-lg">check_circle</span> Meditation &amp; Yoga</li>
+</ul>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest p-10 rounded-xl hover:translate-y-[-8px] transition-transform duration-300">
+<div class="w-16 h-16 bg-tertiary-container rounded-full flex items-center justify-center mb-8">
+<span class="material-symbols-outlined text-on-tertiary-container text-3xl">diversity_1</span>
+</div>
+<h3 class="text-2xl font-bold mb-4">Lan tỏa đồng cảm</h3>
+<p class="text-on-surface-variant mb-6 leading-relaxed">
+                        Các dự án thiện nguyện và hỗ trợ cộng đồng, kết nối những trái tim nhân ái cùng chung sứ mệnh.
+                    </p>
+<ul class="space-y-2 mb-8 text-sm font-medium">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-tertiary text-lg">check_circle</span> Dự án thiện nguyện</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-tertiary text-lg">check_circle</span> Hỗ trợ đồng bào</li>
+</ul>
+</div>
+</div>
+<div class="mt-16 text-center">
+<button class="bg-primary text-on-primary px-10 py-4 rounded-full font-bold text-lg hover:shadow-xl transition-shadow">
+                    Xem lịch hoạt động
+                </button>
+</div>
+</section>
+<!-- Section 4: Lợi Ích -->
+<section class="py-24 bg-surface-container-highest/30 px-6" id="benefits">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-20">
+<h2 class="text-4xl md:text-5xl font-bold mb-6">Tại Sao Nên Tham Gia CENTALUX?</h2>
+<p class="text-xl text-on-surface-variant max-w-2xl mx-auto">Chúng tôi mang đến một môi trường an lành để bạn tự tin là chính mình và tỏa sáng.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<div class="relative aspect-square rounded-xl overflow-hidden group">
+<img alt="Smiling member" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Confident woman smiling in a professional and warm environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAhJGESNyex5fbkv7hJ_mBYJfZ0QePkBMlc6aXt_SdWrNxRdDQQJPUEcYjX-eWl18MsPSgbmBIROtEHvAliwPb4uyzkSmJcYmb6Du4HtUhexPWlWe2BZnQexj7PVuLsMVmkkFsMbkOWXvlhlhP46p1M4uoOV5Zo7EMvHOs0GEB3BO15Tid5rjY52Re0fbN4MBwbnipgLRE1vHb7sLzsMenOgiQeDvXLP3hdoPT6E_-h0cOuB-vQKkV4_TCruBX2xmLvWMlP6ufyTbH"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8">
+<h4 class="text-white text-xl font-bold">Được lắng nghe và thấu hiểu tận tâm</h4>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-10 rounded-xl flex flex-col justify-center">
+<span class="material-symbols-outlined text-5xl text-primary mb-6">volunteer_activism</span>
+<h4 class="text-2xl font-bold mb-4">Tìm kiếm sự hỗ trợ</h4>
+<p class="text-on-surface-variant">Hành trình chữa lành không đơn độc khi luôn có cộng đồng bên cạnh hỗ trợ bạn mỗi bước đi.</p>
+</div>
+<div class="relative aspect-square rounded-xl overflow-hidden group">
+<img alt="Growth" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="People studying together in a brightly lit library" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjqW6xsGZM8eMCBcssunM15E2w7SuATMvXKJbkazVQ87N2jiWzqUWTXggMaI5kvPmRSvCgRbzX2NsnqHg0GCw3OSQegObs0e8P-Pno1nipiOWpzMLiZFaf5iMIaKdXhlC9KgsWZYWNUAqh4UsD5kj0VNbwaEZuOSrg-UwExGV6AwNLdGcEBXmp3V3_itEwOwhrmjNe9byQD7I7oki0owot9NQGnffvOAYyLvRBgPhZN9l3gARaJl3aTzi2ebbvsprI-JuMZQ0YHvc8"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8">
+<h4 class="text-white text-xl font-bold">Phát triển bản thân &amp; kiến thức kỹ năng</h4>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-10 rounded-xl flex flex-col justify-center">
+<span class="material-symbols-outlined text-5xl text-secondary mb-6">group_add</span>
+<h4 class="text-2xl font-bold mb-4">Mở rộng mối quan hệ</h4>
+<p class="text-on-surface-variant">Kết nối với những người cùng chí hướng, cùng tần số và cùng khao khát lan tỏa yêu thương.</p>
+</div>
+<div class="relative aspect-square rounded-xl overflow-hidden group">
+<img alt="Positivity" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A group of people holding hands in a circle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsPG6TcSYDBYLkF7G7ULi-RxfOJDG7AuRWi1fZCaq1InII669-5HblfcMTa2RiAobljWJam6oV9MVuYTnYo_249MHmcoFEkmNIaqtFBMezpOvulwZHrWUFkiiCZyZlwE_HUKd9J043S9rYj-mOMvbmyqDuJQYSqUL5D_i6D2nqMXDraDf8VFp2EntUhMy4j_A0MM4gYaeOVVHIAnotcJTi-qXJWh1x478QZeTbISSVIrnK2oLAQKGCXCOnUGuwM4DtaLuec8j6P1e3"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8">
+<h4 class="text-white text-xl font-bold">Góp phần lan tỏa giá trị tích cực</h4>
+</div>
+</div>
+<div class="bg-primary text-on-primary p-10 rounded-xl flex flex-col justify-center items-center text-center">
+<h4 class="text-3xl font-bold mb-6">Sẵn sàng trải nghiệm?</h4>
+<button class="bg-on-primary text-primary px-8 py-3 rounded-full font-bold hover:bg-white transition-colors">Đăng ký ngay</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 5: Cảm Nhận -->
+<section class="py-24 px-6" id="testimonials">
+<div class="max-w-7xl mx-auto">
+<h2 class="text-4xl md:text-5xl font-bold mb-16 text-center">Thành Viên Nói Gì Về CENTALUX?</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<div class="bg-surface-container-low p-12 rounded-xl relative">
+<span class="material-symbols-outlined absolute -top-6 -left-6 text-7xl text-primary-container opacity-50">format_quote</span>
+<p class="text-xl italic mb-8 relative z-10">"CENTALUX đã thay đổi cuộc đời tôi. Từ một người khép kín, tôi đã tìm thấy sự tự tin và những người bạn thực sự thấu hiểu mình qua các buổi workshop chữa lành."</p>
+<div class="flex items-center gap-4">
+<img alt="Chị Lan" class="w-16 h-16 rounded-full object-cover border-4 border-white" data-alt="Portrait of a smiling mature Vietnamese woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCI_WvhnoMpHZyWs5H-5XisNaBo_KpR-arjOhNdy3a_F2TTtLvmqoEwyw9DV9p4iulIU3E5k_xE4Pwz6iqLD645b9NoI3KTTt6HLhFBy-T_fNLw9_QZcDIRy_KI5JpbN6ScnuJ_TlkeNSnSwQ-lzWurt0GGtgi17PeaaelEna6yY_wVi3PCeWzS4FseBztFJhaOahSgWkU3rCr-mxLwh_0EOJq1by-7XhmHdbd387y-2CnrdZ6VRh3CbPRqGxGYS7NUJMgcqUKqk702"/>
+<div>
+<h5 class="font-bold text-lg">Chị Lan</h5>
+<p class="text-on-surface-variant text-sm">Hà Nội</p>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-12 rounded-xl relative">
+<span class="material-symbols-outlined absolute -top-6 -left-6 text-7xl text-primary-container opacity-50">format_quote</span>
+<p class="text-xl italic mb-8 relative z-10">"Những buổi workshop giúp tôi hiểu rõ bản thân và học được cách lắng nghe người khác một cách chân thành hơn. Đây là một không gian tuyệt vời để phát triển tâm hồn."</p>
+<div class="flex items-center gap-4">
+<img alt="Anh Tuấn" class="w-16 h-16 rounded-full object-cover border-4 border-white" data-alt="Portrait of a professional young man smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1ygomvJH5EIMEH8hW5owAjvL_xCENbMQ00U2-4eBsLpz4HFcFG2W4srQ_yjb5m-p_XKXVeehyIc5WEsED0TXdemW_UOWYdg7uYDuiFhD2azXeornjSYs9xLf5ZYn7_etaZcSisGCLoz5FQGDZ3iosWozW_7OIEM16ItJRVJQNOhYxDWmoprfLOu1qSRrsWd6Qyjdux-Gs5bYv5tAK5N-oy-zCJQEGpBrDc-KIbsLmqXE-24GAeA807yKUKfewru2RFv_DJ2LaGnvM"/>
+<div>
+<h5 class="font-bold text-lg">Anh Tuấn</h5>
+<p class="text-on-surface-variant text-sm">TP.HCM</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 6: Đội Ngũ Sáng Lập -->
+<section class="py-24 bg-surface-container-low px-6" id="team">
+<div class="max-w-7xl mx-auto">
+<h2 class="text-4xl md:text-5xl font-bold mb-20 text-center">Đội Ngũ Sáng Lập</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+<!-- Founder Card -->
+<div class="bg-surface-container-lowest p-6 rounded-xl text-center group">
+<div class="mb-6 relative mx-auto w-48 h-48">
+<img alt="Team 1" class="w-full h-full object-cover rounded-full group-hover:grayscale-0 grayscale transition-all duration-500" data-alt="Portrait of a female founder with a warm smile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzE6sWzZGGU8M96XIqW6PDLFcVplBegXLjE6cV0fsxhO1i7SD5F3JPqkWbgYB4jJABkPCU4ajwrogb8q2d3LvBZnhvm3kG2eB8IhoMQb-Z_l4DC2BifU5kQotYgk64oHhmwQrW0vWjlx5Dx-tm7bnhuM0s1mCc9LP5lIl_oEwObKJF8f79psdZOVFsxMPxaHPDTtvQhogG4FZh3WNMca2I2YVi6h5i_qe60KoRKVtrHXzoJTAB3SOg92IrarsPBP_Ezmc7R3APF4eD"/>
+</div>
+<h4 class="text-xl font-bold mb-2">Minh Châu</h4>
+<p class="text-primary font-medium text-sm mb-4">Co-founder / Tâm lý học</p>
+<p class="text-on-surface-variant text-sm">Chuyên gia với 10 năm kinh nghiệm trong trị liệu tâm lý và thiền định.</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl text-center group">
+<div class="mb-6 relative mx-auto w-48 h-48">
+<img alt="Team 2" class="w-full h-full object-cover rounded-full group-hover:grayscale-0 grayscale transition-all duration-500" data-alt="Portrait of a male founder in a modern office" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOOaC8u9zQG0JU_6JCzpbc__56QwdltSvzPMbXzHglg4XjayY439Za6AuOshh9ivL3n3120eqfH4B71tQmrrovHfKRR1PmjLm0jl-sicHQd6K3bVlHjxUS3bG6yKEmhrIQjA6SMpu2f1B3bZuObQOSq1nsQUVw_pdjgpBPP6YEq0IKIXR8cuRL03PBIwLuoiCqj0fZMob6p0a8lEFe44swEBcErGW3Kg7v6_H2hYim2m_WD8Q8mzlTX2yIy170UWUIJ2l3qm9TDqVr"/>
+</div>
+<h4 class="text-xl font-bold mb-2">Hoàng Nam</h4>
+<p class="text-primary font-medium text-sm mb-4">Co-founder / Cộng đồng</p>
+<p class="text-on-surface-variant text-sm">Nhà hoạt động xã hội nhiệt huyết với khát vọng kết nối cộng đồng tri thức.</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl text-center group">
+<div class="mb-6 relative mx-auto w-48 h-48">
+<img alt="Team 3" class="w-full h-full object-cover rounded-full group-hover:grayscale-0 grayscale transition-all duration-500" data-alt="Portrait of a female creative lead smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtrtOQJE1nrqfsYJt-0Klok444Rnxe4ycNsEAJkGY3IWmO-QPUcNhqeUHOgdBQRs4GQGR_mR27NkKuo3pIiFq9Pg79ezud_hyWkR7GwTKneoQiGJLvalYIffXr4ehJxh4cSwvgnqp5hAE-tfSYehWoM37EnMVusRMaLf8poGVT0PfnPSS9-f0RgKAwDjYDa_BlN8kqP7jcX67Y5As58HWxP23TALL462CZbYYtYQuC4B0tG336iMHQvC9BcszaP02zxPwV8pMItX_h"/>
+</div>
+<h4 class="text-xl font-bold mb-2">Phương Linh</h4>
+<p class="text-primary font-medium text-sm mb-4">Creative Director</p>
+<p class="text-on-surface-variant text-sm">Người mang nghệ thuật và sáng tạo vào các tiến trình chữa lành tại CENTALUX.</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl text-center group">
+<div class="mb-6 relative mx-auto w-48 h-48">
+<img alt="Team 4" class="w-full h-full object-cover rounded-full group-hover:grayscale-0 grayscale transition-all duration-500" data-alt="Portrait of a male operations head" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCm-NuRU_n2JULrj1EeFOtpwsY6dDEOTPpZQJ-ygE7YbmtQFWr9YJVxGF9w7fxTGjMmDvTGDap_GWEG6RCM8Az60PqL-ZqunCk3PCUomWcloeNZ3_rx33KhHc4Yg9LUGk_jSSrmh_On3cZFKuglbtK5IKD_enpArITjHaEJZMPn8CGGrJORcngkJYZUg-iFNZpN-GzMesztN7gO-wCHg4qd6486-GdqfG8AGvNsETgBkq8UBc2f_vkXQ4Lf2-Hfvz-_YEdQaznovkWK"/>
+</div>
+<h4 class="text-xl font-bold mb-2">Quốc Anh</h4>
+<p class="text-primary font-medium text-sm mb-4">Operations Manager</p>
+<p class="text-on-surface-variant text-sm">Đảm bảo mọi hoạt động của cộng đồng diễn ra mượt mà và hiệu quả nhất.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 7: Final CTA -->
+<section class="py-24 px-6 bg-gradient-to-br from-primary to-primary-dim text-on-primary">
+<div class="max-w-4xl mx-auto text-center space-y-10">
+<h2 class="text-4xl md:text-6xl font-bold leading-tight">Bắt Đầu Hành Trình Của Bạn Ngay Hôm Nay!</h2>
+<p class="text-xl opacity-90">Hãy cùng chúng tôi xây dựng một cuộc sống ý nghĩa và tràn đầy thấu cảm.</p>
+<div class="flex flex-wrap justify-center gap-4">
+<button class="px-10 py-5 bg-on-primary text-primary rounded-full text-xl font-bold shadow-2xl hover:scale-105 transition-transform">
+                        Tham gia cộng đồng ngay
+                    </button>
+<button class="px-10 py-5 bg-transparent border-2 border-on-primary text-on-primary rounded-full text-xl font-bold hover:bg-on-primary/10 transition-colors">
+                        Đăng ký nhận bản tin
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-[#faf5f5] dark:bg-zinc-950 px-12 py-16 w-full rounded-t-[3rem] mt-[-3rem] relative z-20">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+<div class="space-y-6">
+<div class="text-xl font-serif font-black text-[#89494a] dark:text-[#fba8a8]"><img alt="CENTALUX Logo" class="h-12 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ADBb0uibqLKdKLj4Uh8xcEwGnvYpiTCl3w9PbgdkpTuvngO1bOvGJ8lgy__bBWRONUmHVos5P4Nibvq2jfg7x4HZThZp0kIRvfsqDvqOXn6N5wsz6F-x6YkubHTqGyedpcncRDAG2Oa4zIyKebPV3Q45MoUqf_6beYtD1A25r4l_lC3ZCXuMrzfXhoDEvL3Xa7R1gDOqWSlYBYuPtqeZKEX8vhPY1xKoi4ugov6xj8DrKTF84QmS4oi6oCaGrAK4s_ScniUVT1Ra0SaX_w"/></div>
+<p class="text-zinc-500 dark:text-zinc-400">Nơi kết nối trí tuệ và trái tim, cùng bạn kiến tạo cuộc sống hạnh phúc và thấu cảm.</p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center hover:bg-primary-container transition-colors" href="#">
+<span class="material-symbols-outlined text-primary">public</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center hover:bg-primary-container transition-colors" href="#">
+<span class="material-symbols-outlined text-primary">mail</span>
+</a>
+</div>
+</div>
+<div>
+<h6 class="font-bold mb-6 text-primary">Liên kết</h6>
+<ul class="space-y-4 text-zinc-500 dark:text-zinc-400">
+<li><a class="hover:underline hover:text-[#89494a]" href="#about">Về chúng tôi</a></li>
+<li><a class="hover:underline hover:text-[#89494a]" href="#activities">Hoạt động</a></li>
+<li><a class="hover:underline hover:text-[#89494a]" href="#benefits">Lợi ích</a></li>
+<li><a class="hover:underline hover:text-[#89494a]" href="#">Chính sách bảo mật</a></li>
+</ul>
+</div>
+<div>
+<h6 class="font-bold mb-6 text-primary">Liên hệ</h6>
+<ul class="space-y-4 text-zinc-500 dark:text-zinc-400">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-sm">location_on</span> Hà Nội, Việt Nam</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-sm">phone</span> Hotline: 1900 xxxx</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-sm">email</span> contact@centalux.vn</li>
+</ul>
+</div>
+<div>
+<h6 class="font-bold mb-6 text-primary">Bản tin</h6>
+<p class="text-zinc-500 dark:text-zinc-400 mb-4">Nhận những cập nhật mới nhất từ cộng đồng.</p>
+<div class="flex gap-2">
+<input class="bg-surface-container-highest border-none rounded-full px-4 py-2 w-full text-sm focus:ring-2 focus:ring-primary/20" placeholder="Email của bạn" type="email"/>
+<button class="bg-primary text-on-primary w-10 h-10 rounded-full flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-sm">send</span>
+</button>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto pt-12 mt-12 border-t border-zinc-200 dark:border-zinc-800 text-center text-zinc-500 dark:text-zinc-400 text-sm">
+            © 2024 CENTALUX – THẤU CẢM. All rights reserved.
+        </div>
+</footer>
+</body></html>
