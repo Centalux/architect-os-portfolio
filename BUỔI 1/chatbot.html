@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page with AI Chatbot</title>
+    <!-- Modern Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <!-- Marked.js -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        /* CSS reset & base */
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-color: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --chat-bg: rgba(15, 23, 42, 0.65);
+            --chat-border: rgba(255, 255, 255, 0.15);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            color: var(--text-main);
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        /* ------------------ */
+        /* LANDING PAGE DEMO  */
+        /* ------------------ */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            padding: 0 20px;
+        }
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #38bdf8, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        /* ------------------ */
+        /* CHATBOT BUTTON     */
+        /* ------------------ */
+        .chat-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: none;
+            color: white;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); /* shadow-2xl style */
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, background 0.3s;
+            z-index: 1000;
+        }
+        .chat-toggle:hover {
+            transform: scale(1.05);
+            background: var(--primary-hover);
+        }
+        .chat-toggle svg {
+            width: 30px;
+            height: 30px;
+        }
+
+        /* ------------------ */
+        /* CHAT WINDOW        */
+        /* ------------------ */
+        .chat-window {
+            position: fixed;
+            bottom: 110px;
+            right: 30px;
+            width: 380px;
+            height: 600px;
+            max-height: calc(100vh - 140px);
+            background: var(--chat-bg);
+            /* Glassmorphism */
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--chat-border);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6); /* shadow-2xl */
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform-origin: bottom right;
+            transform: scale(0);
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+            z-index: 999;
+        }
+        .chat-window.open {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        /* ------------------ */
+        /* HEADER             */
+        /* ------------------ */
+        .chat-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--chat-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .header-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .bot-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #c084fc);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .bot-details {
+            display: flex;
+            flex-direction: column;
+        }
+        .bot-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: white;
+        }
+        .bot-status {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .action-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+        .action-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+        
+        /* Spin utility for the refresh button */
+        .spin {
+            animation: spin 0.5s linear infinite;
+        }
+        @keyframes spin { 
+            100% { transform: rotate(360deg); } 
+        }
+
+        /* ------------------ */
+        /* BODY (MESSAGES)    */
+        /* ------------------ */
+        .chat-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            background: rgba(0, 0, 0, 0.15);
+        }
+        /* Custom scrollbar */
+        .chat-body::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-body::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .chat-body::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            animation: slideIn 0.3s ease-out;
+            word-wrap: break-word;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .msg-user {
+            align-self: flex-end;
+            background: var(--primary);
+            color: white;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .msg-bot {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--chat-border);
+            color: var(--text-main);
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ------------------ */
+        /* MARKDOWN STYLES    */
+        /* ------------------ */
+        .chat-markdown p {
+            line-height: 1.6;
+            margin: 0 0 10px 0;
+        }
+        .chat-markdown p:last-child {
+            margin: 0;
+        }
+        .chat-markdown ul, .chat-markdown ol {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+        .chat-markdown li {
+            margin-bottom: 6px;
+            line-height: 1.6;
+        }
+        .chat-markdown li::marker {
+            color: #818cf8; /* Bullet marker clearly visible */
+        }
+        .chat-markdown strong {
+            font-weight: 700;
+            color: #38bdf8; /* Accent color for bold */
+        }
+        .chat-markdown code {
+            font-family: 'Fira Code', Consolas, monospace;
+            background: rgba(0, 0, 0, 0.4); /* Dark background */
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #fbbf24;
+        }
+        .chat-markdown pre {
+            background: #1e293b; /* Darker background for block code */
+            padding: 12px;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin: 10px 0;
+        }
+        .chat-markdown pre code {
+            background: transparent;
+            padding: 0;
+            color: #e2e8f0;
+        }
+        .chat-markdown blockquote {
+            border-left: 4px solid var(--primary);
+            margin: 10px 0;
+            padding: 4px 0 4px 16px;
+            color: #cbd5e1; /* Faded text for blockquote */
+            font-style: italic;
+            background: rgba(99, 102, 241, 0.08); /* slight primary tint */
+            border-radius: 0 8px 8px 0;
+        }
+        .chat-markdown a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
+        .chat-markdown a:hover {
+            text-decoration: underline;
+        }
+
+        /* ------------------ */
+        /* TYPING INDICATOR   */
+        /* ------------------ */
+        .typing-indicator {
+            display: flex;
+            gap: 6px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--chat-border);
+            border-radius: 16px;
+            border-bottom-left-radius: 4px;
+            align-self: flex-start;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.3s ease-out;
+        }
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); opacity: 0.4; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+        
+        .typing-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-left: 8px;
+            font-style: italic;
+        }
+
+        /* ------------------ */
+        /* FOOTER (INPUT)     */
+        /* ------------------ */
+        .chat-footer {
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-top: 1px solid var(--chat-border);
+            display: flex;
+            gap: 12px;
+        }
+        .chat-input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 12px 18px;
+            color: white;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            font-family: inherit;
+        }
+        .chat-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+        }
+        .chat-input::placeholder {
+            color: var(--text-muted);
+        }
+        .send-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+        }
+        .send-btn:hover:not(:disabled) {
+            background: var(--primary-hover);
+            transform: scale(1.08);
+        }
+        .send-btn:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .send-btn svg {
+            width: 20px;
+            height: 20px;
+            transform: translateX(2px);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Landing Page Content -->
+    <div class="hero">
+        <h1>Welcome to NextGen AI</h1>
+        <p>Experience the power of our conversational AI platform. Click the floating button in the bottom right corner to interact with the Centalux admin chatbot, featuring sleek Glassmorphism design and flawless Markdown rendering.</p>
+    </div>
+
+    <!-- Chat Toggle Button -->
+    <button class="chat-toggle" id="chat-toggle" aria-label="Open chat">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+        </svg>
+    </button>
+
+    <!-- Chat Window -->
+    <div class="chat-window" id="chat-window">
+        <!-- Header -->
+        <div class="chat-header">
+            <div class="header-info">
+                <div class="bot-avatar">C</div>
+                <div class="bot-details">
+                    <span class="bot-name">Centalux admin</span>
+                    <span class="bot-status">
+                        <span class="status-dot"></span> Online
+                    </span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="action-btn" id="refresh-btn" aria-label="Refresh chat">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                </button>
+                <button class="action-btn" id="close-btn" aria-label="Close chat">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Body (Messages) -->
+        <div class="chat-body" id="chat-body">
+            <!-- Messages will be injected manually via JS -->
+        </div>
+
+        <!-- Footer (Input) -->
+        <div class="chat-footer">
+            <input type="text" class="chat-input" id="chat-input" placeholder="Type a message..." autocomplete="off">
+            <button class="send-btn" id="send-btn" aria-label="Send message" disabled>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Setup Marked.js configuration
+            marked.setOptions({
+                breaks: true, // Convert \n to <br> automatically
+                gfm: true, // Use GitHub Flavored Markdown
+            });
+
+            const chatToggle = document.getElementById('chat-toggle');
+            const chatWindow = document.getElementById('chat-window');
+            const closeBtn = document.getElementById('close-btn');
+            const refreshBtn = document.getElementById('refresh-btn');
+            const chatBody = document.getElementById('chat-body');
+            const chatInput = document.getElementById('chat-input');
+            const sendBtn = document.getElementById('send-btn');
+
+            const defaultGreeting = "Xin chào! Mình là **Centalux admin**.\n\nMình có thể giúp gì cho bạn hôm nay?\n\nBạn có thể thử các định dạng sau:\n- **In đậm** văn bản\n- Gõ \`Code block\` cơ bản\n- > Trích dẫn";
+
+            // Initialize chat
+            function initChat() {
+                chatBody.innerHTML = '';
+                addBotMessage(defaultGreeting);
+            }
+
+            // Open / Close window
+            chatToggle.addEventListener('click', () => {
+                chatWindow.classList.add('open');
+            });
+            closeBtn.addEventListener('click', () => {
+                chatWindow.classList.remove('open');
+            });
+
+            // Input handling & disabled button logic
+            chatInput.addEventListener('input', () => {
+                sendBtn.disabled = chatInput.value.trim() === '';
+            });
+
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !sendBtn.disabled) {
+                    handleSend();
+                }
+            });
+
+            sendBtn.addEventListener('click', handleSend);
+
+            // BẮT BUỘC: Logic Refresh
+            refreshBtn.addEventListener('click', () => {
+                const icon = refreshBtn.querySelector('svg');
+                
+                // 1. Icon refresh phải có animation xoay
+                icon.classList.add('spin');
+                
+                // 2. Xóa toàn bộ lịch sử chat
+                chatBody.innerHTML = '';
+                
+                // 3. Hiển thị lại tin nhắn chào mặc định ban đầu
+                addBotMessage(defaultGreeting);
+                
+                // 4. Sau đúng 500ms → dừng animation xoay
+                setTimeout(() => {
+                    icon.classList.remove('spin');
+                }, 500);
+            });
+
+            // Handle Send Flow
+            function handleSend() {
+                const text = chatInput.value.trim();
+                if (!text) return;
+
+                // Render User message
+                addUserMessage(text);
+                
+                // Reset input
+                chatInput.value = '';
+                sendBtn.disabled = true;
+
+                // Show typing animation
+                const typingId = 'typing-' + Date.now();
+                addTypingIndicator(typingId);
+                scrollToBottom();
+
+                // Fake API Call (1500ms delay) to answer
+                setTimeout(() => {
+                    removeTypingIndicator(typingId);
+                    
+                    const aiResponse = generateMockAIResponse(text);
+                    addBotMessage(aiResponse);
+                }, 1500);
+            }
+
+            function addUserMessage(text) {
+                const msgEl = document.createElement('div');
+                msgEl.className = 'message msg-user';
+                msgEl.textContent = text; 
+                chatBody.appendChild(msgEl);
+                scrollToBottom();
+            }
+
+            function addBotMessage(markdownText) {
+                const msgEl = document.createElement('div');
+                msgEl.className = 'message msg-bot chat-markdown';
+                
+                // BẮT BUỘC: Tất cả response từ AI phải render qua marked.parse
+                msgEl.innerHTML = marked.parse(markdownText);
+                
+                chatBody.appendChild(msgEl);
+                scrollToBottom();
+            }
+
+            function addTypingIndicator(id) {
+                const typingEl = document.createElement('div');
+                typingEl.className = 'typing-indicator';
+                typingEl.id = id;
+                typingEl.innerHTML = `
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                    <span class="typing-text">Đang nhập...</span>
+                `;
+                chatBody.appendChild(typingEl);
+            }
+
+            function removeTypingIndicator(id) {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.remove();
+                }
+            }
+
+            function scrollToBottom() {
+                setTimeout(() => {
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                }, 10);
+            }
+
+            // Mock responses that demonstrate Markdown rendering
+            function generateMockAIResponse(userInput) {
+                const lowerInput = userInput.toLowerCase();
+                
+                if (lowerInput.includes('code') || lowerInput.includes('js')) {
+                    return "Đây là một đoạn ví dụ về mã nguồn:\n\n```javascript\nfunction greet() {\n  console.log('Hello from Centalux admin!');\n}\n```\n\nMình đã sử dụng cấu trúc **backticks** để viết code.";
+                }
+                
+                if (lowerInput.includes('chào') || lowerInput.includes('hello')) {
+                    return "Chào bạn! Chúc một ngày tuyệt vời. Bạn cần mình tư vấn vấn đề gì nào?\n\n> Có thể hỏi mình về Code, Markdown, hoặc tính năng Refresh nhé!";
+                }
+
+                if (lowerInput.includes('list') || lowerInput.includes('danh sách')) {
+                    return "Dĩ nhiên, đây là danh sách những thứ mình có thể định dạng:\n\n1. Câu trả lời cực thông minh.\n2. In đậm **Accent Color**.\n3. Định dạng `code` nhỏ gọn.\n4. Giữ giao diện UI/UX rất mượt với *Glassmorphism*.";
+                }
+
+                return `Mình xin trả lời nội dung bạn vừa gửi: *"${userInput}"*\n\nTheo yêu cầu, mình hiển thị văn bản sử dụng hàm bắt buộc \`marked.parse(text)\`.\n\nĐặc điểm hệ thống của chúng ta:\n- **Glassmorphism**: sang trọng, đẳng cấp\n- **Shadow-2xl**: tạo chiều sâu\n- **Typing Indicator**: Animation mượt mà với 3 dấu chấm nhảy`;
+            }
+
+            // Init State on Load
+            initChat();
+        });
+    </script>
+</body>
+</html>
