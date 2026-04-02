@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <?!= include('CSS'); ?>
+</head>
+<body>
+
+<div class="app-wrapper">
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-icon">🍽️</div>
+      <div>
+        <h1>Quản Lý Nguồn Thực Phẩm</h1>
+        <p class="subtitle">Hệ thống báo phẩm & thực đơn trong tuần</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- TAB NAVIGATION -->
+  <nav class="tab-nav">
+    <button class="tab-btn active" onclick="showSection('baogia')" id="nav-baogia">
+      <span class="tab-icon">📋</span>
+      <span>Báo Giá</span>
+    </button>
+    <button class="tab-btn" onclick="showSection('thucdon')" id="nav-thucdon">
+      <span class="tab-icon">🍜</span>
+      <span>Thực Đơn Tuần</span>
+    </button>
+    <button class="tab-btn" onclick="showSection('bangke')" id="nav-bangke">
+      <span class="tab-icon">📊</span>
+      <span>Bảng Kê Tuần</span>
+    </button>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- ==================== BÁO GIÁ ==================== -->
+    <div id="section-baogia" class="section active">
+      <div class="card">
+        <div class="card-header">
+          <h3>📋 Danh Mục Báo Giá Thực Phẩm</h3>
+          <div class="btn-group">
+            <div class="search-box">
+              <input type="text" id="searchBaoGia" placeholder="Tìm kiếm thực phẩm..." oninput="filterBaoGia()">
+            </div>
+            <button class="btn btn-primary" onclick="openAddItemModal()">➕ Thêm thủ công</button>
+            <div class="file-input-wrapper">
+              <button class="btn btn-success">📥 Nhập từ Excel</button>
+              <input type="file" accept=".xlsx,.xls,.csv" onchange="handleExcelImport(event)">
+            </div>
+            <button class="btn btn-danger" onclick="showConfirmClearAll()">🗑️ Xóa toàn bộ</button>
+          </div>
+        </div>
+        <div class="table-container" id="baogia-table-container">
+          <div class="empty-state">
+            <div class="icon">📋</div>
+            <p>Chưa có dữ liệu báo giá. Hãy thêm thủ công hoặc nhập từ file Excel!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== THỰC ĐƠN TUẦN ==================== -->
+    <div id="section-thucdon" class="section">
+      <!-- Day Tabs -->
+      <div class="day-tabs" id="dayTabs"></div>
+
+      <!-- Meal Tabs -->
+      <div class="meal-tabs">
+        <button class="meal-tab morning active" onclick="selectMeal('sang')">🌅 Sáng</button>
+        <button class="meal-tab noon" onclick="selectMeal('trua')">☀️ Trưa</button>
+        <button class="meal-tab afternoon" onclick="selectMeal('chieu')">🌙 Chiều</button>
+      </div>
+
+      <!-- Headcount Info -->
+      <div class="headcount-info" id="headcountInfo">
+        👥 Số người ăn: <span id="headcountValue">--</span> người
+      </div>
+
+      <!-- Summary -->
+      <div class="summary-grid" id="mealSummary" style="grid-template-columns:1fr 1fr 1fr 1fr">
+        <div class="summary-box">
+          <div class="label">Tiêu chuẩn / người (₫)</div>
+          <div class="value" style="display:flex;align-items:center;gap:6px;justify-content:center">
+            <input type="number" step="any" id="inputTieuChuan" 
+              style="width:120px;padding:6px 10px;border:2px solid var(--primary);border-radius:8px;font-size:16px;font-weight:700;text-align:center;font-family:'Inter',sans-serif;color:var(--primary);background:rgba(37,99,235,0.04);outline:none"
+              value="25000" min="0" 
+              oninput="updateTieuChuan(this.value)">
+            <span style="font-size:14px;color:var(--text-muted)">₫</span>
+          </div>
+        </div>
+        <div class="summary-box" style="border-left:4px solid #1E3A5F">
+          <div class="label">Tổng tiêu chuẩn</div>
+          <div class="value" id="sumTongTieuChuan" style="color:#1E3A5F">0 ₫</div>
+        </div>
+        <div class="summary-box" style="border-left:4px solid var(--primary)">
+          <div class="label">Thực tế</div>
+          <div class="value text-price" id="sumThucTe">0 ₫</div>
+        </div>
+        <div class="summary-box highlight">
+          <div class="label">Dư</div>
+          <div class="value" id="sumDu">0 ₫</div>
+        </div>
+      </div>
+
+      <!-- Menu Table -->
+      <div class="card">
+        <div class="card-header">
+          <h3 id="menuTitle">🍜 Thực đơn</h3>
+          <button class="btn btn-primary btn-sm" onclick="addMenuRow()">➕ Thêm món</button>
+        </div>
+        <div class="table-container">
+          <table id="menuTable">
+            <thead>
+              <tr>
+                <th style="width:30px">STT</th>
+                <th style="width:200px">Tên thực phẩm</th>
+                <th style="width:120px">Nguồn cung</th>
+                <th style="width:140px" data-tooltip="Đơn giá tra từ Bảng Báo giá">Đơn giá</th>
+                <th style="width:160px" data-tooltip="Nhập định lượng cho 1 người ăn">Định lượng / 1 người</th>
+                <th style="width:120px" data-tooltip="= Đơn giá × Định lượng × Số người">Tổng tiền</th>
+                <th style="width:60px">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="menuBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Day Summary (Bảng kê ngày) -->
+      <div class="card" id="daySummaryCard" style="margin-top:16px">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0;">📊 Bảng kê chi tiết trong ngày</h3>
+          <button class="btn btn-success" onclick="exportDailyExcel()">📥 Xuất Excel (Ngày)</button>
+        </div>
+        <div id="daySummaryContent"></div>
+      </div>
+    </div>
+
+    <!-- ==================== BẢNG KÊ TUẦN ==================== -->
+    <div id="section-bangke" class="section">
+      <div class="card">
+        <div class="card-header">
+          <h3>📊 Bảng Kê Tổng Hợp Tuần</h3>
+          <button class="btn btn-success" onclick="exportWeeklyExcel()">📥 Xuất file Excel (.xlsx)</button>
+        </div>
+        <div class="table-container" id="weekSummaryContainer">
+          <div class="empty-state">
+            <div class="icon">📊</div>
+            <p>Hãy nhập thực đơn trước để xem bảng kê tổng hợp tuần.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ==================== MODALS ==================== -->
+
+<!-- Add/Edit Item Modal -->
+<div class="modal-overlay" id="addItemModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="addItemModalTitle">➕ Thêm Thực Phẩm</h3>
+      <button class="modal-close" onclick="closeModal('addItemModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editItemIndex">
+      <div class="form-group">
+        <label>Tên thực phẩm *</label>
+        <input type="text" class="form-control" id="itemName" placeholder="VD: Thịt lợn mông">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Đơn vị tính *</label>
+          <select class="form-control" id="itemUnit">
+            <option value="kg">kg</option>
+            <option value="g">g</option>
+            <option value="quả">quả</option>
+            <option value="mớ">mớ</option>
+            <option value="bó">bó</option>
+            <option value="hộp">hộp</option>
+            <option value="chai">chai</option>
+            <option value="lít">lít</option>
+            <option value="bịch">bịch</option>
+            <option value="gói">gói</option>
+            <option value="lon">lon</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Giá thị trường (₫)</label>
+          <input type="number" class="form-control" id="itemMarketPrice" placeholder="0" min="0">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Giá tăng gia (₫)</label>
+        <input type="number" class="form-control" id="itemSelfPrice" placeholder="0" min="0">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('addItemModal')">Hủy</button>
+      <button class="btn btn-success" onclick="saveItem()">💾 Lưu</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Clear All Modal -->
+<div class="modal-overlay" id="confirmClearModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>⚠️ Xác nhận xóa</h3>
+      <button class="modal-close" onclick="closeModal('confirmClearModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="confirm-body">
+        <div class="confirm-icon">⚠️</div>
+        <h3>Xóa toàn bộ danh mục?</h3>
+        <p>Hành động này sẽ xóa tất cả thực phẩm trong bảng báo giá. Bạn không thể hoàn tác!</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('confirmClearModal')">Hủy bỏ</button>
+      <button class="btn btn-danger" onclick="confirmClearAll()">🗑️ Xóa toàn bộ</button>
+    </div>
+  </div>
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- SheetJS Library for Excel Import -->
+<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+<!-- xlsx-js-style for styled Excel export -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
+
+<?!= include('JavaScript'); ?>
+
+</body>
+</html>

@@ -1,0 +1,522 @@
+<script>
+// ============================================
+// JAVASCRIPT.html - Client-side Logic
+// ============================================
+
+// ---- GLOBAL DATA ----
+var productsCache = [];
+
+// ---- NAVIGATION ----
+function showSection(sectionName) {
+  // Hide all sections
+  document.querySelectorAll('.section').forEach(function(s) {
+    s.classList.remove('active');
+  });
+  // Remove active from nav
+  document.querySelectorAll('.nav-link').forEach(function(n) {
+    n.classList.remove('active');
+  });
+  // Show target section
+  document.getElementById('section-' + sectionName).classList.add('active');
+  document.getElementById('nav-' + sectionName).classList.add('active');
+
+  // Load data for the section
+  switch (sectionName) {
+    case 'dashboard': loadDashboard(); break;
+    case 'customers': loadCustomers(); break;
+    case 'products': loadProducts(); break;
+    case 'orders': loadOrders(); break;
+  }
+}
+
+// ---- LOADING ----
+function showLoading() {
+  document.getElementById('loadingOverlay').classList.add('show');
+}
+
+function hideLoading() {
+  document.getElementById('loadingOverlay').classList.remove('show');
+}
+
+// ---- TOAST NOTIFICATIONS ----
+function showToast(message, type) {
+  type = type || 'info';
+  var container = document.getElementById('toastContainer');
+  var toast = document.createElement('div');
+  var icons = { success: '✅', error: '❌', info: 'ℹ️' };
+  toast.className = 'toast toast-' + type;
+  toast.innerHTML = '<span>' + (icons[type] || '') + '</span><span>' + message + '</span>';
+  container.appendChild(toast);
+  setTimeout(function() {
+    if (toast.parentNode) toast.parentNode.removeChild(toast);
+  }, 4000);
+}
+
+// ---- MODAL ----
+function openModal(id) {
+  document.getElementById(id).classList.add('show');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+}
+
+// ---- FORMAT ----
+function formatVND(amount) {
+  if (isNaN(amount) || amount === null || amount === undefined) return '0 ₫';
+  return new Intl.NumberFormat('vi-VN').format(amount) + ' ₫';
+}
+
+function getMemberBadge(level) {
+  var map = {
+    'Silver': '<span class="badge badge-silver">🥈 Silver</span>',
+    'Gold': '<span class="badge badge-gold">🥇 Gold</span>',
+    'Platinum': '<span class="badge badge-platinum">💎 Platinum</span>'
+  };
+  return map[level] || '<span class="badge badge-new">' + (level || 'N/A') + '</span>';
+}
+
+// ============================================
+// DASHBOARD
+// ============================================
+
+function loadDashboard() {
+  showLoading();
+  // Load all data for stats
+  google.script.run
+    .withSuccessHandler(function(customers) {
+      document.getElementById('stat-customers').textContent = customers.length;
+
+      google.script.run
+        .withSuccessHandler(function(products) {
+          document.getElementById('stat-products').textContent = products.length;
+
+          google.script.run
+            .withSuccessHandler(function(orders) {
+              document.getElementById('stat-orders').textContent = orders.length;
+
+              // Calculate revenue
+              var total = 0;
+              orders.forEach(function(o) { total += (parseFloat(o.Total_Amount) || 0); });
+              document.getElementById('stat-revenue').textContent = formatVND(total);
+
+              // Recent orders (last 5)
+              renderRecentOrders(orders.slice(-5).reverse());
+              hideLoading();
+            })
+            .withFailureHandler(function(err) { hideLoading(); showToast('Lỗi: ' + err.message, 'error'); })
+            .getOrders();
+        })
+        .withFailureHandler(function(err) { hideLoading(); showToast('Lỗi: ' + err.message, 'error'); })
+        .getProducts();
+    })
+    .withFailureHandler(function(err) { hideLoading(); showToast('Lỗi: ' + err.message, 'error'); })
+    .getCustomers();
+}
+
+function renderRecentOrders(orders) {
+  var container = document.getElementById('dashboard-recent-orders');
+  if (!orders || orders.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>Chưa có đơn hàng nào</p></div>';
+    return;
+  }
+  var html = '<table><thead><tr>';
+  html += '<th>Mã ĐH</th><th>Khách hàng</th><th>Sản phẩm</th><th>SL</th><th>Tổng tiền</th><th>Trạng thái</th><th>Ngày tạo</th>';
+  html += '</tr></thead><tbody>';
+  orders.forEach(function(o) {
+    html += '<tr>';
+    html += '<td><strong>' + o.Order_ID + '</strong></td>';
+    html += '<td>' + (o.Customer_Name || o.Customer_ID) + '</td>';
+    html += '<td>' + (o.Product_Name || o.Product_ID) + '</td>';
+    html += '<td>' + o.Quantity + '</td>';
+    html += '<td style="color:#8B85FF;font-weight:600;">' + formatVND(o.Total_Amount) + '</td>';
+    html += '<td><span class="badge badge-new">' + o.Status + '</span></td>';
+    html += '<td>' + (o.Created_At_Display || o.Created_At) + '</td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+// ============================================
+// CUSTOMERS
+// ============================================
+
+function loadCustomers() {
+  showLoading();
+  google.script.run
+    .withSuccessHandler(function(data) {
+      renderCustomersTable(data);
+      hideLoading();
+    })
+    .withFailureHandler(function(err) {
+      hideLoading();
+      showToast('Lỗi tải khách hàng: ' + err.message, 'error');
+    })
+    .getCustomers();
+}
+
+function renderCustomersTable(customers) {
+  var container = document.getElementById('customers-table-container');
+  if (!customers || customers.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="icon">👥</div><p>Chưa có khách hàng. Hãy thêm khách hàng mới!</p></div>';
+    return;
+  }
+  var html = '<table><thead><tr>';
+  html += '<th>Mã KH</th><th>Tên khách hàng</th><th>Số điện thoại</th><th>Hạng TV</th><th>Thao tác</th>';
+  html += '</tr></thead><tbody>';
+  customers.forEach(function(c) {
+    html += '<tr>';
+    html += '<td><strong>' + c.Customer_ID + '</strong></td>';
+    html += '<td>' + c.Customer_Name + '</td>';
+    html += '<td>' + c.Phone + '</td>';
+    html += '<td>' + getMemberBadge(c.Member_Level) + '</td>';
+    html += '<td class="actions-cell">';
+    html += '<button class="btn btn-warning btn-icon btn-sm" onclick="editCustomer(\'' + c.Customer_ID + '\',\'' + escapeHtml(c.Customer_Name) + '\',\'' + c.Phone + '\',\'' + c.Member_Level + '\',' + c._rowIndex + ')" title="Sửa">✏️</button>';
+    html += '<button class="btn btn-danger btn-icon btn-sm" onclick="confirmDeleteCustomer(' + c._rowIndex + ',\'' + escapeHtml(c.Customer_Name) + '\')" title="Xóa">🗑️</button>';
+    html += '</td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+function openCustomerModal(isEdit) {
+  document.getElementById('customerModalTitle').textContent = isEdit ? 'Sửa Khách Hàng' : 'Thêm Khách Hàng';
+  if (!isEdit) {
+    document.getElementById('customerRowIndex').value = '';
+    document.getElementById('customerName').value = '';
+    document.getElementById('customerPhone').value = '';
+    document.getElementById('customerLevel').value = 'Silver';
+  }
+  openModal('customerModal');
+}
+
+function editCustomer(id, name, phone, level, rowIndex) {
+  document.getElementById('customerRowIndex').value = rowIndex;
+  document.getElementById('customerName').value = name;
+  document.getElementById('customerPhone').value = phone;
+  document.getElementById('customerLevel').value = level;
+  openCustomerModal(true);
+}
+
+function saveCustomer() {
+  var name = document.getElementById('customerName').value.trim();
+  var phone = document.getElementById('customerPhone').value.trim();
+  var level = document.getElementById('customerLevel').value;
+  var rowIndex = document.getElementById('customerRowIndex').value;
+
+  if (!name || !phone) {
+    showToast('Vui lòng nhập đầy đủ thông tin!', 'error');
+    return;
+  }
+
+  showLoading();
+  closeModal('customerModal');
+
+  if (rowIndex) {
+    // Update
+    google.script.run
+      .withSuccessHandler(function(result) {
+        hideLoading();
+        if (result.success) {
+          showToast(result.message, 'success');
+          loadCustomers();
+        } else {
+          showToast(result.message, 'error');
+        }
+      })
+      .withFailureHandler(function(err) { hideLoading(); showToast('Lỗi: ' + err.message, 'error'); })
+      .updateCustomer({ rowIndex: rowIndex, customerName: name, phone: phone, memberLevel: level });
+  } else {
+    // Add
+    google.script.run
+      .withSuccessHandler(function(result) {
+        hideLoading();
+        if (result.success) {
+          showToast(result.message, 'success');
+          loadCustomers();
+        } else {
+          showToast(result.message, 'error');
+        }
+      })
+      .withFailureHandler(function(err) { hideLoading(); showToast('Lỗi: ' + err.message, 'error'); })
+      .addCustomer({ customerName: name, phone: phone, memberLevel: level });
+  }
+}
+
+function confirmDeleteCustomer(rowIndex, name) {
+  if (confirm('Bạn có chắc muốn xóa khách hàng "' + name + '"?')) {
+    showLoading();
+    google.script.run
+      .withSuccessHandler(function(result) {
+        hideLoading();
+        if (result.success) {
+          showToast(result.message, 'success');
+          loadCustomers();
+        } else {
+          showToast(result.message, 'error');
+        }
+      })
+      .withFailureHandler(function(err) { hideLoading(); showToast('Lỗi: ' + err.message, 'error'); })
+      .deleteCustomer(rowIndex);
+  }
+}
+
+// ============================================
+// PRODUCTS
+// ============================================
+
+function loadProducts() {
+  showLoading();
+  google.script.run
+    .withSuccessHandler(function(data) {
+      productsCache = data;
+      renderProductsTable(data);
+      hideLoading();
+    })
+    .withFailureHandler(function(err) {
+      hideLoading();
+      showToast('Lỗi tải sản phẩm: ' + err.message, 'error');
+    })
+    .getProducts();
+}
+
+function renderProductsTable(products) {
+  var container = document.getElementById('products-table-container');
+  if (!products || products.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="icon">📦</div><p>Chưa có sản phẩm. Hãy thêm sản phẩm mới!</p></div>';
+    return;
+  }
+  var html = '<table><thead><tr>';
+  html += '<th>Mã SP</th><th>Tên sản phẩm</th><th>Đơn giá</th><th>Thao tác</th>';
+  html += '</tr></thead><tbody>';
+  products.forEach(function(p) {
+    html += '<tr>';
+    html += '<td><strong>' + p.Product_ID + '</strong></td>';
+    html += '<td>' + p.Product_Name + '</td>';
+    html += '<td style="color:#8B85FF;font-weight:600;">' + formatVND(p.Price) + '</td>';
+    html += '<td class="actions-cell">';
+    html += '<button class="btn btn-warning btn-icon btn-sm" onclick="editProduct(\'' + p.Product_ID + '\',\'' + escapeHtml(p.Product_Name) + '\',' + p.Price + ',' + p._rowIndex + ')" title="Sửa">✏️</button>';
+    html += '<button class="btn btn-danger btn-icon btn-sm" onclick="confirmDeleteProduct(' + p._rowIndex + ',\'' + escapeHtml(p.Product_Name) + '\')" title="Xóa">🗑️</button>';
+    html += '</td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+function openProductModal(isEdit) {
+  document.getElementById('productModalTitle').textContent = isEdit ? 'Sửa Sản Phẩm' : 'Thêm Sản Phẩm';
+  if (!isEdit) {
+    document.getElementById('productRowIndex').value = '';
+    document.getElementById('productName').value = '';
+    document.getElementById('productPrice').value = '';
+  }
+  openModal('productModal');
+}
+
+function editProduct(id, name, price, rowIndex) {
+  document.getElementById('productRowIndex').value = rowIndex;
+  document.getElementById('productName').value = name;
+  document.getElementById('productPrice').value = price;
+  openProductModal(true);
+}
+
+function saveProduct() {
+  var name = document.getElementById('productName').value.trim();
+  var price = document.getElementById('productPrice').value.trim();
+  var rowIndex = document.getElementById('productRowIndex').value;
+
+  if (!name || !price || parseFloat(price) < 0) {
+    showToast('Vui lòng nhập đầy đủ thông tin hợp lệ!', 'error');
+    return;
+  }
+
+  showLoading();
+  closeModal('productModal');
+
+  if (rowIndex) {
+    google.script.run
+      .withSuccessHandler(function(result) {
+        hideLoading();
+        if (result.success) {
+          showToast(result.message, 'success');
+          loadProducts();
+        } else {
+          showToast(result.message, 'error');
+        }
+      })
+      .withFailureHandler(function(err) { hideLoading(); showToast('Lỗi: ' + err.message, 'error'); })
+      .updateProduct({ rowIndex: rowIndex, productName: name, price: price });
+  } else {
+    google.script.run
+      .withSuccessHandler(function(result) {
+        hideLoading();
+        if (result.success) {
+          showToast(result.message, 'success');
+          loadProducts();
+        } else {
+          showToast(result.message, 'error');
+        }
+      })
+      .withFailureHandler(function(err) { hideLoading(); showToast('Lỗi: ' + err.message, 'error'); })
+      .addProduct({ productName: name, price: price });
+  }
+}
+
+function confirmDeleteProduct(rowIndex, name) {
+  if (confirm('Bạn có chắc muốn xóa sản phẩm "' + name + '"?')) {
+    showLoading();
+    google.script.run
+      .withSuccessHandler(function(result) {
+        hideLoading();
+        if (result.success) {
+          showToast(result.message, 'success');
+          loadProducts();
+        } else {
+          showToast(result.message, 'error');
+        }
+      })
+      .withFailureHandler(function(err) { hideLoading(); showToast('Lỗi: ' + err.message, 'error'); })
+      .deleteProduct(rowIndex);
+  }
+}
+
+// ============================================
+// ORDERS
+// ============================================
+
+function loadOrders() {
+  showLoading();
+  google.script.run
+    .withSuccessHandler(function(data) {
+      renderOrdersTable(data);
+      hideLoading();
+    })
+    .withFailureHandler(function(err) {
+      hideLoading();
+      showToast('Lỗi tải đơn hàng: ' + err.message, 'error');
+    })
+    .getOrders();
+}
+
+function renderOrdersTable(orders) {
+  var container = document.getElementById('orders-table-container');
+  if (!orders || orders.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="icon">🛒</div><p>Chưa có đơn hàng. Hãy tạo đơn hàng mới!</p></div>';
+    return;
+  }
+  var html = '<table><thead><tr>';
+  html += '<th>Mã ĐH</th><th>Khách hàng</th><th>Sản phẩm</th><th>SL</th><th>Tổng tiền</th><th>Trạng thái</th><th>Ngày tạo</th>';
+  html += '</tr></thead><tbody>';
+  orders.forEach(function(o) {
+    html += '<tr>';
+    html += '<td><strong>' + o.Order_ID + '</strong></td>';
+    html += '<td>' + (o.Customer_Name || o.Customer_ID) + '</td>';
+    html += '<td>' + (o.Product_Name || o.Product_ID) + '</td>';
+    html += '<td>' + o.Quantity + '</td>';
+    html += '<td style="color:#8B85FF;font-weight:600;">' + formatVND(o.Total_Amount) + '</td>';
+    html += '<td><span class="badge badge-new">' + o.Status + '</span></td>';
+    html += '<td>' + (o.Created_At_Display || o.Created_At) + '</td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+function openOrderModal() {
+  showLoading();
+  google.script.run
+    .withSuccessHandler(function(data) {
+      hideLoading();
+      // Populate customer dropdown
+      var custSelect = document.getElementById('orderCustomer');
+      custSelect.innerHTML = '<option value="">-- Chọn khách hàng --</option>';
+      data.customers.forEach(function(c) {
+        custSelect.innerHTML += '<option value="' + c.Customer_ID + '">' + c.Customer_Name + ' (' + c.Customer_ID + ')</option>';
+      });
+
+      // Populate product dropdown
+      productsCache = data.products;
+      var prodSelect = document.getElementById('orderProduct');
+      prodSelect.innerHTML = '<option value="">-- Chọn sản phẩm --</option>';
+      data.products.forEach(function(p) {
+        prodSelect.innerHTML += '<option value="' + p.Product_ID + '" data-price="' + p.Price + '">' + p.Product_Name + ' - ' + formatVND(p.Price) + '</option>';
+      });
+
+      document.getElementById('orderQuantity').value = 1;
+      document.getElementById('orderTotalDisplay').textContent = '0 ₫';
+
+      openModal('orderModal');
+    })
+    .withFailureHandler(function(err) {
+      hideLoading();
+      showToast('Lỗi: ' + err.message, 'error');
+    })
+    .getOrderFormData();
+}
+
+function calculateTotal() {
+  var prodSelect = document.getElementById('orderProduct');
+  var selectedOption = prodSelect.options[prodSelect.selectedIndex];
+  var price = selectedOption ? parseFloat(selectedOption.getAttribute('data-price')) || 0 : 0;
+  var quantity = parseInt(document.getElementById('orderQuantity').value) || 0;
+  var total = price * quantity;
+  document.getElementById('orderTotalDisplay').textContent = formatVND(total);
+}
+
+function submitOrder() {
+  var customerId = document.getElementById('orderCustomer').value;
+  var productId = document.getElementById('orderProduct').value;
+  var quantity = document.getElementById('orderQuantity').value;
+
+  if (!customerId) {
+    showToast('Vui lòng chọn khách hàng!', 'error');
+    return;
+  }
+  if (!productId) {
+    showToast('Vui lòng chọn sản phẩm!', 'error');
+    return;
+  }
+  if (!quantity || parseInt(quantity) <= 0) {
+    showToast('Số lượng phải lớn hơn 0!', 'error');
+    return;
+  }
+
+  showLoading();
+  closeModal('orderModal');
+
+  google.script.run
+    .withSuccessHandler(function(result) {
+      hideLoading();
+      if (result.success) {
+        showToast(result.message, 'success');
+        loadOrders();
+      } else {
+        showToast(result.message, 'error');
+      }
+    })
+    .withFailureHandler(function(err) {
+      hideLoading();
+      showToast('Lỗi: ' + err.message, 'error');
+    })
+    .createOrder({ customerId: customerId, productId: productId, quantity: quantity });
+}
+
+// ---- UTILITY ----
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.toString()
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// ---- INIT ----
+document.addEventListener('DOMContentLoaded', function() {
+  loadDashboard();
+});
+</script>

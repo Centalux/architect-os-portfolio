@@ -1,1395 +1,430 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.4">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+<!DOCTYPE html>
+
+<html class="dark" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CENTALUX - THẤU CẢM | The Sacred Digital Sanctuary</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Outfit:wght@300;400;500;600;700&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "surface-container-highest": "#353534",
+                "on-tertiary-container": "#69301e",
+                "on-surface": "#e5e2e1",
+                "tertiary-fixed-dim": "#ffb59e",
+                "on-tertiary": "#54200f",
+                "on-secondary-container": "#8bc5f4",
+                "primary-fixed-dim": "#ffb0c9",
+                "on-primary-fixed": "#3e001e",
+                "inverse-on-surface": "#313030",
+                "on-surface-variant": "#d8c1c6",
+                "error-container": "#93000a",
+                "outline-variant": "#534247",
+                "background": "#131313",
+                "inverse-surface": "#e5e2e1",
+                "inverse-primary": "#964261",
+                "surface-container": "#201f1f",
+                "tertiary-container": "#ea9980",
+                "surface-variant": "#353534",
+                "secondary-fixed-dim": "#93cdfc",
+                "surface-container-lowest": "#0e0e0e",
+                "on-secondary-fixed-variant": "#004b71",
+                "surface-bright": "#3a3939",
+                "secondary-container": "#00527b",
+                "tertiary-fixed": "#ffdbd0",
+                "surface": "#131313",
+                "error": "#ffb4ab",
+                "on-primary-fixed-variant": "#792b4a",
+                "on-primary": "#5c1333",
+                "on-secondary-fixed": "#001e30",
+                "on-error": "#690005",
+                "primary": "#ffb4cb",
+                "on-background": "#e5e2e1",
+                "surface-container-low": "#1c1b1b",
+                "secondary": "#93cdfc",
+                "outline": "#a08b90",
+                "on-tertiary-fixed": "#390c01",
+                "tertiary": "#ffb8a2",
+                "primary-fixed": "#ffd9e2",
+                "primary-container": "#f48fb1",
+                "on-error-container": "#ffdad6",
+                "on-primary-container": "#722544",
+                "secondary-fixed": "#cbe6ff",
+                "surface-dim": "#131313",
+                "surface-container-high": "#2a2a2a",
+                "on-secondary": "#00344f",
+                "surface-tint": "#ffb0c9",
+                "on-tertiary-fixed-variant": "#713623"
+              },
+              fontFamily: {
+                "headline": ["Noto Serif"],
+                "body": ["Outfit", "sans-serif"],
+                "label": ["Manrope", "sans-serif"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+        body {
+            background-color: #131313;
+            color: #e5e2e1;
+            font-family: 'Outfit', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .font-serif { font-family: 'Noto Serif', serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(53, 53, 52, 0.3);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .neon-glow-primary {
+            box-shadow: 0 0 20px rgba(255, 180, 203, 0.2);
+        }
+        .neon-glow-secondary {
+            box-shadow: 0 0 20px rgba(147, 205, 252, 0.2);
+        }
+    </style>
+    <!-- Chatbot Styles and Libs -->
+    <link rel="stylesheet" href="chatbot.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
-<body>
-<p class="p1">import React, { useState, useMemo, useEffect, useRef } from 'react';</p>
-<p class="p1">import {<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">  </span>ShoppingCart, List, FileText, Calendar, Upload, Plus, Trash2,<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">  </span>Search, Sun, CloudSun, Moon, Download, Printer, Check, AlertCircle, X, Pencil</p>
-<p class="p1">} from 'lucide-react';</p>
-<p class="p2"><br></p>
-<p class="p1">// --- CONSTANTS &amp; INITIAL DATA ---</p>
-<p class="p1">const MEALS = [</p>
-<p class="p1"><span class="Apple-converted-space">  </span>{ id: 'sang', name: 'Buổi Sáng', icon: Sun, color: 'text-orange-500', bg: 'bg-orange-50', border: 'border-orange-200', btn: 'text-orange-600 border-orange-200 hover:bg-orange-50' },</p>
-<p class="p1"><span class="Apple-converted-space">  </span>{ id: 'trua', name: 'Buổi Trưa', icon: CloudSun, color: 'text-yellow-600', bg: 'bg-yellow-50', border: 'border-yellow-200', btn: 'text-yellow-600 border-yellow-200 hover:bg-yellow-50' },</p>
-<p class="p1"><span class="Apple-converted-space">  </span>{ id: 'chieu', name: 'Buổi Chiều', icon: Moon, color: 'text-blue-500', bg: 'bg-blue-50', border: 'border-blue-200', btn: 'text-blue-600 border-blue-200 hover:bg-blue-50' }</p>
-<p class="p1">];</p>
-<p class="p2"><br></p>
-<p class="p1">const DAYS = [</p>
-<p class="p1"><span class="Apple-converted-space">  </span>{ id: 0, name: 'Thứ Hai' }, { id: 1, name: 'Thứ Ba' }, { id: 2, name: 'Thứ Tư' },</p>
-<p class="p1"><span class="Apple-converted-space">  </span>{ id: 3, name: 'Thứ Năm' }, { id: 4, name: 'Thứ Sáu' }, { id: 5, name: 'Thứ Bảy' }, { id: 6, name: 'Chủ Nhật' }</p>
-<p class="p1">];</p>
-<p class="p2"><br></p>
-<p class="p1">const WEEKS = [0, 1, 2, 3, 4];</p>
-<p class="p2"><br></p>
-<p class="p1">const PRIORITY_ITEMS = [</p>
-<p class="p1"><span class="Apple-converted-space">  </span>'gạo bc',</p>
-<p class="p1"><span class="Apple-converted-space">  </span>'chất đốt',</p>
-<p class="p1"><span class="Apple-converted-space">  </span>'tạp chi gia vị',</p>
-<p class="p1"><span class="Apple-converted-space">  </span>'nước mắm nam ngư',</p>
-<p class="p1"><span class="Apple-converted-space">  </span>'dầu ăn',</p>
-<p class="p1"><span class="Apple-converted-space">  </span>'mì chính',</p>
-<p class="p1"><span class="Apple-converted-space">  </span>'muối i ốt'</p>
-<p class="p1">];</p>
-<p class="p2"><br></p>
-<p class="p1">const SYSTEM_PRICE_IDS = ['p_gas', 'p_tapchi'];</p>
-<p class="p2"><br></p>
-<p class="p1">const getItemRank = (name) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const lowerName = name.toLowerCase().trim();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const index = PRIORITY_ITEMS.findIndex(item =&gt; lowerName.includes(item));</p>
-<p class="p1"><span class="Apple-converted-space">  </span>return index !== -1 ? index : PRIORITY_ITEMS.length;</p>
-<p class="p1">};</p>
-<p class="p2"><br></p>
-<p class="p1">const initialPrices = [</p>
-<p class="p1"><span class="Apple-converted-space">  </span>{ id: 'p_gao', name: 'Gạo BC', unit: 'kg', marketPrice: 18000, farmPrice: 18000 },</p>
-<p class="p1"><span class="Apple-converted-space">  </span>{ id: 'p_gas', name: 'Chất đốt', unit: 'kg', marketPrice: 35000, farmPrice: 35000 },</p>
-<p class="p1"><span class="Apple-converted-space">  </span>{ id: 'p_tapchi', name: 'Tạp chi gia vị', unit: 'đ', marketPrice: 1, farmPrice: 1 },</p>
-<p class="p1"><span class="Apple-converted-space">  </span>{ id: 'p_mam', name: 'Nước mắm nam ngư', unit: 'lít', marketPrice: 40000, farmPrice: 40000 },</p>
-<p class="p1"><span class="Apple-converted-space">  </span>{ id: 'p_dau', name: 'Dầu ăn', unit: 'lít', marketPrice: 50000, farmPrice: 50000 },</p>
-<p class="p1"><span class="Apple-converted-space">  </span>{ id: 'p_michinh', name: 'Mì chính', unit: 'kg', marketPrice: 60000, farmPrice: 60000 },</p>
-<p class="p1"><span class="Apple-converted-space">  </span>{ id: 'p_muoi', name: 'Muối i ốt', unit: 'kg', marketPrice: 5000, farmPrice: 5000 },</p>
-<p class="p1"><span class="Apple-converted-space">  </span>{ id: 'p1', name: 'Thịt lợn mông', unit: 'kg', marketPrice: 150000, farmPrice: 120000 },</p>
-<p class="p1"><span class="Apple-converted-space">  </span>{ id: 'p2', name: 'Rau muống', unit: 'mớ', marketPrice: 10000, farmPrice: 5000 },</p>
-<p class="p1">];</p>
-<p class="p2"><br></p>
-<p class="p1">const generateInitialMenu = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const menu = {};</p>
-<p class="p1"><span class="Apple-converted-space">  </span>WEEKS.forEach(w =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>menu[w] = {};</p>
-<p class="p1"><span class="Apple-converted-space">    </span>DAYS.forEach(d =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>menu[w][d.id] = {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>sang: { people: 0, standard: 0, dishes: [] },</p>
-<p class="p1"><span class="Apple-converted-space">        </span>trua: { people: 0, standard: 0, dishes: [] },</p>
-<p class="p1"><span class="Apple-converted-space">        </span>chieu: { people: 0, standard: 0, dishes: [] }</p>
-<p class="p1"><span class="Apple-converted-space">      </span>};</p>
-<p class="p1"><span class="Apple-converted-space">    </span>});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>return menu;</p>
-<p class="p1">};</p>
-<p class="p2"><br></p>
-<p class="p1">// --- HELPER FUNCTIONS ---</p>
-<p class="p1">const formatCurrency = (val) =&gt; new Intl.NumberFormat('vi-VN').format(val || 0);</p>
-<p class="p1">const formatNum = (val) =&gt; new Intl.NumberFormat('vi-VN').format(Math.round(val || 0));</p>
-<p class="p1">const formatQty = (val) =&gt; val ? Number(Number(val).toFixed(3)) : 0;<span class="Apple-converted-space"> </span></p>
-<p class="p1">const generateId = () =&gt; Math.random().toString(36).substr(2, 9);</p>
-<p class="p2"><br></p>
-<p class="p1">// --- CUSTOM COMPONENTS ---</p>
-<p class="p1">const SearchableSelect = ({ options, value, onChange, placeholder }) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const [isOpen, setIsOpen] = useState(false);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const [search, setSearch] = useState('');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const wrapperRef = useRef(null);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>useEffect(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const handleClickOutside = (event) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>if (wrapperRef.current &amp;&amp; !wrapperRef.current.contains(event.target)) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>setIsOpen(false);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>};</p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.addEventListener('mousedown', handleClickOutside);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>return () =&gt; document.removeEventListener('mousedown', handleClickOutside);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}, []);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const selectedOption = options.find(o =&gt; o.id === value);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const filteredOptions = options.filter(o =&gt;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>o.name.toLowerCase().includes(search.toLowerCase()) &amp;&amp; !SYSTEM_PRICE_IDS.includes(o.id)</p>
-<p class="p1"><span class="Apple-converted-space">  </span>).sort((a, b) =&gt; getItemRank(a.name) - getItemRank(b.name));<span class="Apple-converted-space"> </span></p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>return (</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div className="relative w-full" ref={wrapperRef}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>className="w-full text-sm bg-transparent outline-none cursor-pointer flex justify-between items-center p-1 rounded hover:bg-slate-50 transition-colors"</p>
-<p class="p1"><span class="Apple-converted-space">        </span>onClick={() =&gt; { setIsOpen(!isOpen); setSearch(''); }}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;span className={`truncate ${selectedOption ? 'text-slate-800 font-medium' : 'text-slate-400'}`}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>{selectedOption ? selectedOption.name : placeholder}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;Search className="w-3 h-3 text-slate-400 ml-1 flex-shrink-0" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">      </span></p>
-<p class="p1"><span class="Apple-converted-space">      </span>{isOpen &amp;&amp; (</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="absolute z-50 top-full left-0 mt-1 w-64 bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="p-2 border-b border-slate-100 bg-slate-50"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="relative"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-400" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;input</p>
-<p class="p1"><span class="Apple-converted-space">                </span>type="text"</p>
-<p class="p1"><span class="Apple-converted-space">                </span>autoFocus</p>
-<p class="p1"><span class="Apple-converted-space">                </span>className="w-full pl-8 pr-3 py-1.5 bg-white border border-slate-200 rounded-lg text-sm outline-none focus:border-emerald-500 transition-colors"</p>
-<p class="p1"><span class="Apple-converted-space">                </span>placeholder="Tìm nguyên liệu..."</p>
-<p class="p1"><span class="Apple-converted-space">                </span>value={search}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>onChange={e =&gt; setSearch(e.target.value)}</p>
-<p class="p1"><span class="Apple-converted-space">              </span>/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="max-h-48 overflow-y-auto py-1"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{filteredOptions.length === 0 ? (</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="px-3 py-4 text-sm text-slate-400 text-center"&gt;Không tìm thấy&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>) : (</p>
-<p class="p1"><span class="Apple-converted-space">              </span>filteredOptions.map(o =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>key={o.id}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>className="px-3 py-2 text-sm hover:bg-emerald-50 cursor-pointer text-slate-700 flex justify-between items-center"</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>onClick={() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>onChange(o.id);</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>setIsOpen(false);</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>}}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;span className="font-medium"&gt;{o.name}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;span className="text-xs text-slate-400"&gt;{o.unit}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>))</p>
-<p class="p1"><span class="Apple-converted-space">            </span>)}</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>)}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>);</p>
-<p class="p1">};</p>
-<p class="p2"><br></p>
-<p class="p1">export default function App() {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>// --- STATE ---</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const [activeTab, setActiveTab] = useState('thucdon'); // baogia, thucdon, tuan, thang</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const [activeWeek, setActiveWeek] = useState(0);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const [activeDay, setActiveDay] = useState(0);</p>
-<p class="p2"><span class="Apple-converted-space">  </span></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const [prices, setPrices] = useState(initialPrices);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const [menuData, setMenuData] = useState(generateInitialMenu());</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const [searchPriceQuery, setSearchPriceQuery] = useState('');</p>
-<p class="p2"><span class="Apple-converted-space">  </span></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const [newPrice, setNewPrice] = useState({ name: '', unit: 'kg', marketPrice: '', farmPrice: '' });</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const [editingPriceId, setEditingPriceId] = useState(null);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const [editPriceForm, setEditPriceForm] = useState({ name: '', unit: '', marketPrice: '', farmPrice: '' });</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const [toast, setToast] = useState(null);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const [showDeleteModal, setShowDeleteModal] = useState(false);</p>
-<p class="p2"><span class="Apple-converted-space">  </span></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const fileInputRef = useRef(null);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const showToast = (msg) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setToast(msg);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setTimeout(() =&gt; setToast(null), 3000);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>useEffect(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Tải thư viện có hỗ trợ Style cho Excel</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const script = document.createElement('script');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>script.src = 'https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>script.async = true;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.body.appendChild(script);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>return () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>document.body.removeChild(script);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>};</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}, []);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>// --- ACTIONS: PRICE LIST ---</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const handleAddPrice = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if (!newPrice.name) {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>showToast('Vui lòng nhập tên thực phẩm!');</p>
-<p class="p1"><span class="Apple-converted-space">      </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setPrices([...prices, {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>id: generateId(),</p>
-<p class="p1"><span class="Apple-converted-space">      </span>name: newPrice.name,</p>
-<p class="p1"><span class="Apple-converted-space">      </span>unit: newPrice.unit,</p>
-<p class="p1"><span class="Apple-converted-space">      </span>marketPrice: Number(newPrice.marketPrice) || 0,</p>
-<p class="p1"><span class="Apple-converted-space">      </span>farmPrice: Number(newPrice.farmPrice) || 0</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}]);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setNewPrice({ name: '', unit: 'kg', marketPrice: '', farmPrice: '' });</p>
-<p class="p1"><span class="Apple-converted-space">    </span>showToast('Đã thêm thực phẩm!');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const triggerFileInput = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if (fileInputRef.current) fileInputRef.current.click();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const handleFileUpload = (e) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const file = e.target.files[0];</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if (!file) return;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>if (window.XLSX) {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const reader = new FileReader();</p>
-<p class="p1"><span class="Apple-converted-space">      </span>reader.onload = (evt) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>const bstr = evt.target.result;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>const wb = window.XLSX.read(bstr, { type: 'binary' });</p>
-<p class="p1"><span class="Apple-converted-space">          </span>const wsname = wb.SheetNames[0];</p>
-<p class="p1"><span class="Apple-converted-space">          </span>const ws = wb.Sheets[wsname];</p>
-<p class="p1"><span class="Apple-converted-space">          </span>const data = window.XLSX.utils.sheet_to_json(ws, { header: 1 });</p>
-<p class="p2"><span class="Apple-converted-space">          </span></p>
-<p class="p1"><span class="Apple-converted-space">          </span>const newPrices = [];</p>
-<p class="p1"><span class="Apple-converted-space">          </span>for(let i = 1; i &lt; data.length; i++) {</p>
-<p class="p1"><span class="Apple-converted-space">             </span>const row = data[i];</p>
-<p class="p1"><span class="Apple-converted-space">             </span>if(row &amp;&amp; row.length &gt;= 2 &amp;&amp; row[0]) {</p>
-<p class="p1"><span class="Apple-converted-space">               </span>newPrices.push({</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>id: generateId(),</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>name: String(row[0]).trim(),</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>unit: String(row[1]).trim(),</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>marketPrice: Number(String(row[2] || '0').replace(/[^0-9]/g, '')) || 0,</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>farmPrice: Number(String(row[3] || '0').replace(/[^0-9]/g, '')) || 0,</p>
-<p class="p1"><span class="Apple-converted-space">               </span>});</p>
-<p class="p1"><span class="Apple-converted-space">             </span>}</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}</p>
-<p class="p1"><span class="Apple-converted-space">          </span>if (newPrices.length &gt; 0) {</p>
-<p class="p1"><span class="Apple-converted-space">             </span>setPrices(prev =&gt; [...prev, ...newPrices]);</p>
-<p class="p1"><span class="Apple-converted-space">             </span>showToast(`Thành công! Đã nhập ${newPrices.length} thực phẩm từ Excel.`);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">             </span>showToast('Không tìm thấy dữ liệu hợp lệ!');</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>} catch (error) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>showToast('Lỗi khi đọc file Excel.');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>};</p>
-<p class="p1"><span class="Apple-converted-space">      </span>reader.readAsBinaryString(file);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>showToast('Thư viện Excel đang được tải, vui lòng thử lại sau vài giây.');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>e.target.value = '';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const handleDeleteAllPrices = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setPrices(prices.filter(p =&gt; SYSTEM_PRICE_IDS.includes(p.id)));</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setShowDeleteModal(false);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>showToast('Đã xóa danh mục (Giữ lại mục mặc định hệ thống)!');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const handleStartEdit = (p) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setEditingPriceId(p.id);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setEditPriceForm({ ...p });</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const handleSaveEdit = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if (!editPriceForm.name) {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>showToast('Tên thực phẩm không được để trống!');</p>
-<p class="p1"><span class="Apple-converted-space">      </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setPrices(prices.map(p =&gt; p.id === editingPriceId ? {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>...p,</p>
-<p class="p1"><span class="Apple-converted-space">      </span>name: editPriceForm.name,</p>
-<p class="p1"><span class="Apple-converted-space">      </span>unit: editPriceForm.unit,</p>
-<p class="p1"><span class="Apple-converted-space">      </span>marketPrice: Number(editPriceForm.marketPrice) || 0,</p>
-<p class="p1"><span class="Apple-converted-space">      </span>farmPrice: Number(editPriceForm.farmPrice) || 0</p>
-<p class="p1"><span class="Apple-converted-space">    </span>} : p));</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setEditingPriceId(null);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>showToast('Đã cập nhật thực phẩm!');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const handleCancelEdit = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setEditingPriceId(null);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>// --- ACTIONS: MENU ---</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const updateMealInfo = (mealId, field, value) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setMenuData(prev =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const newData = { ...prev };</p>
-<p class="p1"><span class="Apple-converted-space">      </span>newData[activeWeek][activeDay][mealId][field] = Number(value) || 0;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>return newData;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const addDish = (mealId) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setMenuData(prev =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const newData = structuredClone(prev);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>newData[activeWeek][activeDay][mealId].dishes.push({</p>
-<p class="p1"><span class="Apple-converted-space">        </span>id: generateId(),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>name: '',</p>
-<p class="p1"><span class="Apple-converted-space">        </span>ingredients: []</p>
-<p class="p1"><span class="Apple-converted-space">      </span>});</p>
-<p class="p1"><span class="Apple-converted-space">      </span>return newData;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const updateDishName = (mealId, dishId, name) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setMenuData(prev =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const newData = structuredClone(prev);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const dish = newData[activeWeek][activeDay][mealId].dishes.find(d =&gt; d.id === dishId);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>if (dish) dish.name = name;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>return newData;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const removeDish = (mealId, dishId) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setMenuData(prev =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const newData = structuredClone(prev);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>newData[activeWeek][activeDay][mealId].dishes = newData[activeWeek][activeDay][mealId].dishes.filter(d =&gt; d.id !== dishId);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>return newData;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const addIngredient = (mealId, dishId) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setMenuData(prev =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const newData = structuredClone(prev);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const dish = newData[activeWeek][activeDay][mealId].dishes.find(d =&gt; d.id === dishId);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>if (dish) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>dish.ingredients.push({</p>
-<p class="p1"><span class="Apple-converted-space">          </span>id: generateId(),</p>
-<p class="p1"><span class="Apple-converted-space">          </span>priceId: '',</p>
-<p class="p1"><span class="Apple-converted-space">          </span>source: 'nhathau',</p>
-<p class="p1"><span class="Apple-converted-space">          </span>qty: 0</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>return newData;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const updateIngredient = (mealId, dishId, ingId, field, value) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setMenuData(prev =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const newData = structuredClone(prev);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const dish = newData[activeWeek][activeDay][mealId].dishes.find(d =&gt; d.id === dishId);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>if (dish) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const ing = dish.ingredients.find(i =&gt; i.id === ingId);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (ing) ing[field] = value;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>return newData;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const removeIngredient = (mealId, dishId, ingId) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setMenuData(prev =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const newData = structuredClone(prev);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const dish = newData[activeWeek][activeDay][mealId].dishes.find(d =&gt; d.id === dishId);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>if (dish) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>dish.ingredients = dish.ingredients.filter(i =&gt; i.id !== ingId);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>return newData;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>// --- CORE CALCULATIONS ---</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const getUnitPrice = (priceId, source) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const p = prices.find(p =&gt; p.id === priceId);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if (!p) return 0;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>return source === 'nhathau' ? p.marketPrice : p.farmPrice;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const getMealAutoCalc = (week, day, mealId) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const mealData = menuData[week]?.[day]?.[mealId];</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if (!mealData) return { dishesCost: 0, gasCost: 0, tapChiCost: 0, totalStandard: 0 };</p>
-<p class="p2"><span class="Apple-converted-space">    </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const peopleCount = Number(mealData.people) || 0;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const standard = Number(mealData.standard) || 0;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const totalStandard = peopleCount * standard;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>let dishesCost = 0;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>mealData.dishes.forEach(dish =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>dish.ingredients.forEach(ing =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const qtyRaw = Number(ing.qty);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (!ing.priceId || qtyRaw &lt;= 0) return;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const pInfo = prices.find(p =&gt; p.id === ing.priceId) || { unit: '-' };</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const isKg = pInfo.unit.toLowerCase() === 'kg';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const actualQtyPerPerson = isKg ? qtyRaw / 1000 : qtyRaw;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>dishesCost += getUnitPrice(ing.priceId, ing.source) * actualQtyPerPerson * peopleCount;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>});</p>
-<p class="p1"><span class="Apple-converted-space">    </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const gasCost = totalStandard * 0.05;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const tapChiCost = totalStandard &gt; 0 ? Math.max(0, totalStandard - gasCost - dishesCost) : 0;</p>
-<p class="p2"><span class="Apple-converted-space">    </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>return { dishesCost, gasCost, tapChiCost, totalStandard };</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>// --- AGGREGATION ENGINE ---</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const aggregateData = (targetWeek, targetDay) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const result = {};<span class="Apple-converted-space"> </span></p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const addToResult = (priceId, source, actualTotalQty, d, w, mealId) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (actualTotalQty &lt;= 0) return;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const pInfo = prices.find(p =&gt; p.id === priceId) || { name: 'Unknown', unit: '-', marketPrice: 0, farmPrice: 0 };</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const key = `${priceId}_${source}`;</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (!result[key]) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>result[key] = {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>priceId: priceId,</p>
-<p class="p1"><span class="Apple-converted-space">                </span>source: source,</p>
-<p class="p1"><span class="Apple-converted-space">                </span>name: pInfo.name,</p>
-<p class="p1"><span class="Apple-converted-space">                </span>unit: pInfo.unit,<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>unitPrice: getUnitPrice(priceId, source),</p>
-<p class="p1"><span class="Apple-converted-space">                </span>totalQty: 0,</p>
-<p class="p1"><span class="Apple-converted-space">                </span>sangQty: 0, truaQty: 0, chieuQty: 0,</p>
-<p class="p1"><span class="Apple-converted-space">                </span>dayQty: { 0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0 },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>weekQty: { 0:0, 1:0, 2:0, 3:0, 4:0 }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>};</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>result[key].totalQty += actualTotalQty;</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (targetDay !== 'all') {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>result[key][`${mealId}Qty`] += actualTotalQty;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>} else if (targetWeek !== 'all') {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>result[key].dayQty[d] += actualTotalQty;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>result[key].weekQty[w] += actualTotalQty;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const weeksToProcess = targetWeek === 'all' ? WEEKS : [targetWeek];</p>
-<p class="p2"><span class="Apple-converted-space">    </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>weeksToProcess.forEach(w =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const daysToProcess = targetDay === 'all' ? DAYS.map(d =&gt; d.id) : [targetDay];</p>
-<p class="p2"><span class="Apple-converted-space">      </span></p>
-<p class="p1"><span class="Apple-converted-space">      </span>daysToProcess.forEach(d =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>MEALS.forEach(meal =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>const mealData = menuData[w][d]?.[meal.id];</p>
-<p class="p1"><span class="Apple-converted-space">          </span>if (!mealData) return;</p>
-<p class="p2"><span class="Apple-converted-space">          </span></p>
-<p class="p1"><span class="Apple-converted-space">          </span>const peopleCount = Number(mealData.people) || 0;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">          </span>// 1. ADD USER DISHES</p>
-<p class="p1"><span class="Apple-converted-space">          </span>mealData.dishes.forEach(dish =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>dish.ingredients.forEach(ing =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">              </span>const qtyRaw = Number(ing.qty);</p>
-<p class="p1"><span class="Apple-converted-space">              </span>if (!ing.priceId || qtyRaw &lt;= 0 || peopleCount &lt;= 0) return;</p>
-<p class="p2"><span class="Apple-converted-space">              </span></p>
-<p class="p1"><span class="Apple-converted-space">              </span>const pInfo = prices.find(p =&gt; p.id === ing.priceId) || { unit: '-' };</p>
-<p class="p1"><span class="Apple-converted-space">              </span>const isKg = pInfo.unit.toLowerCase() === 'kg';</p>
-<p class="p1"><span class="Apple-converted-space">              </span>const actualQtyPerPerson = isKg ? qtyRaw / 1000 : qtyRaw;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>const actualTotalQty = actualQtyPerPerson * peopleCount;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">              </span>addToResult(ing.priceId, ing.source, actualTotalQty, d, w, meal.id);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p1"><span class="Apple-converted-space">          </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">          </span>// 2. ADD AUTO ITEMS (Gas &amp; Tap chi)</p>
-<p class="p1"><span class="Apple-converted-space">          </span>const autoCalc = getMealAutoCalc(w, d, meal.id);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>if (autoCalc.gasCost &gt; 0) {</p>
-<p class="p1"><span class="Apple-converted-space">              </span>const gasPriceObj = prices.find(p =&gt; p.id === 'p_gas') || { marketPrice: 35000 };</p>
-<p class="p1"><span class="Apple-converted-space">              </span>const gasQty = autoCalc.gasCost / (gasPriceObj.marketPrice || 1);<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">              </span>addToResult('p_gas', 'nhathau', gasQty, d, w, meal.id);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}</p>
-<p class="p2"><span class="Apple-converted-space">          </span></p>
-<p class="p1"><span class="Apple-converted-space">          </span>if (autoCalc.tapChiCost &gt; 0) {</p>
-<p class="p1"><span class="Apple-converted-space">              </span>addToResult('p_tapchi', 'nhathau', autoCalc.tapChiCost, d, w, meal.id);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p1"><span class="Apple-converted-space">      </span>});</p>
-<p class="p1"><span class="Apple-converted-space">    </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const rawArray = Object.values(result);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const sortedNhaThau = rawArray.filter(i =&gt; i.source === 'nhathau').sort((a, b) =&gt; getItemRank(a.name) - getItemRank(b.name));</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const sortedTangGia = rawArray.filter(i =&gt; i.source === 'tanggia').sort((a, b) =&gt; getItemRank(a.name) - getItemRank(b.name));</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>return {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>nhaThau: sortedNhaThau,</p>
-<p class="p1"><span class="Apple-converted-space">      </span>tangGia: sortedTangGia,</p>
-<p class="p1"><span class="Apple-converted-space">      </span>totalCostNhaThau: sortedNhaThau.reduce((sum, item) =&gt; sum + (item.totalQty * item.unitPrice), 0),</p>
-<p class="p1"><span class="Apple-converted-space">      </span>totalCostTangGia: sortedTangGia.reduce((sum, item) =&gt; sum + (item.totalQty * item.unitPrice), 0),</p>
-<p class="p1"><span class="Apple-converted-space">    </span>};</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const dailyAgg = useMemo(() =&gt; aggregateData(activeWeek, activeDay), [menuData, activeWeek, activeDay, prices]);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const weeklyAgg = useMemo(() =&gt; aggregateData(activeWeek, 'all'), [menuData, activeWeek, prices]);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const monthlyAgg = useMemo(() =&gt; aggregateData('all', 'all'), [menuData, prices]);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>// --- NÂNG CẤP EXPORT EXCEL XỊN (Hỗ trợ Borders, Format, Merged Cells) ---</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const exportToExcel = (dataObj, title, type) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if (!window.XLSX || !window.XLSX.utils) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>showToast('Thư viện Excel đang tải, vui lòng thử lại sau 2 giây...');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>let subCols = [];</p>
-<p class="p1"><span class="Apple-converted-space">    </span>let qtyExtractor;</p>
-<p class="p2"><span class="Apple-converted-space">    </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>if (type === 'day') {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>subCols = ['Sáng', 'Trưa', 'Chiều'];</p>
-<p class="p1"><span class="Apple-converted-space">        </span>qtyExtractor = (item, idx) =&gt; item[['sangQty', 'truaQty', 'chieuQty'][idx]];</p>
-<p class="p1"><span class="Apple-converted-space">    </span>} else if (type === 'week') {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>subCols = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'CN'];</p>
-<p class="p1"><span class="Apple-converted-space">        </span>qtyExtractor = (item, idx) =&gt; item.dayQty[idx];</p>
-<p class="p1"><span class="Apple-converted-space">    </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>subCols = ['Tuần 1', 'Tuần 2', 'Tuần 3', 'Tuần 4', 'Tuần 5'];</p>
-<p class="p1"><span class="Apple-converted-space">        </span>qtyExtractor = (item, idx) =&gt; item.weekQty[idx];</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const aoa = [];</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const merges = [];</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const sectionRows = new Set();</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const sumRows = new Set();</p>
-<p class="p2"><span class="Apple-converted-space">    </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// 1. Tên bảng</p>
-<p class="p1"><span class="Apple-converted-space">    </span>aoa.push([`BẢNG KÊ ${title.toUpperCase()}`]);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>aoa.push([]);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// 2. Header Row 1</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const header1 = ['STT', 'Tên Thực Phẩm', 'ĐVT', 'Đơn Giá', 'SỐ LƯỢNG THỰC TẾ'];</p>
-<p class="p1"><span class="Apple-converted-space">    </span>for (let i = 0; i &lt; subCols.length; i++) header1.push(''); // Tạo ô trống để merge</p>
-<p class="p1"><span class="Apple-converted-space">    </span>header1.push('Thành Tiền');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>aoa.push(header1);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// 3. Header Row 2</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const header2 = ['', '', '', '', 'TỔNG', ...subCols, ''];</p>
-<p class="p1"><span class="Apple-converted-space">    </span>aoa.push(header2);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Xử lý Merges cho Headers</p>
-<p class="p1"><span class="Apple-converted-space">    </span>merges.push({ s: {r:0, c:0}, e: {r:0, c: 5 + subCols.length} }); // Tiêu đề lớn</p>
-<p class="p1"><span class="Apple-converted-space">    </span>merges.push({ s: {r:2, c:0}, e: {r:3, c:0} }); // STT</p>
-<p class="p1"><span class="Apple-converted-space">    </span>merges.push({ s: {r:2, c:1}, e: {r:3, c:1} }); // Tên</p>
-<p class="p1"><span class="Apple-converted-space">    </span>merges.push({ s: {r:2, c:2}, e: {r:3, c:2} }); // ĐVT</p>
-<p class="p1"><span class="Apple-converted-space">    </span>merges.push({ s: {r:2, c:3}, e: {r:3, c:3} }); // Đơn giá</p>
-<p class="p1"><span class="Apple-converted-space">    </span>merges.push({ s: {r:2, c:4}, e: {r:2, c:4 + subCols.length} }); // Số lượng</p>
-<p class="p1"><span class="Apple-converted-space">    </span>merges.push({ s: {r:2, c:5 + subCols.length}, e: {r:3, c:5 + subCols.length} }); // Thành tiền</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>let currentRow = 4;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>let stt = 1;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const addDataSection = (list, sectionName) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (list.length === 0) return 0;</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Dòng Tên Hạng Mục</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const secRow = [sectionName];</p>
-<p class="p1"><span class="Apple-converted-space">        </span>for(let i=0; i&lt;5+subCols.length; i++) secRow.push('');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>aoa.push(secRow);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>merges.push({ s: {r: currentRow, c:0}, e: {r: currentRow, c: 5 + subCols.length} });</p>
-<p class="p1"><span class="Apple-converted-space">        </span>sectionRows.add(currentRow);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>currentRow++;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>let sectionTotal = 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>list.forEach(item =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const totalQty = item.priceId === 'p_tapchi' ? Math.round(item.totalQty) : formatQty(item.totalQty);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const row = [stt++, item.name, item.unit, item.unitPrice, totalQty];</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>subCols.forEach((_, idx) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>let val = qtyExtractor(item, idx) || 0;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>row.push(item.priceId === 'p_tapchi' ? Math.round(val) : formatQty(val));</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const cost = item.totalQty * item.unitPrice;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>sectionTotal += cost;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>row.push(cost);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>aoa.push(row);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>currentRow++;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p1"><span class="Apple-converted-space">        </span>return sectionTotal;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const costNhaThau = addDataSection(dataObj.nhaThau, "I. BẢO ĐẢM NHÀ THẦU");</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if (dataObj.nhaThau.length &gt; 0) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const sumRow = ['Cộng khoản Nhà thầu:', '', '', '', '', ...subCols.map(()=&gt;''), costNhaThau];</p>
-<p class="p1"><span class="Apple-converted-space">        </span>aoa.push(sumRow);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>merges.push({ s: {r: currentRow, c:0}, e: {r: currentRow, c: 4 + subCols.length} });</p>
-<p class="p1"><span class="Apple-converted-space">        </span>sumRows.add(currentRow);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>currentRow++;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const costTangGia = addDataSection(dataObj.tangGia, "II. TỰ KHAI THÁC, TĂNG GIA");</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if (dataObj.tangGia.length &gt; 0) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const sumRow = ['Cộng khoản Tăng gia:', '', '', '', '', ...subCols.map(()=&gt;''), costTangGia];</p>
-<p class="p1"><span class="Apple-converted-space">        </span>aoa.push(sumRow);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>merges.push({ s: {r: currentRow, c:0}, e: {r: currentRow, c: 4 + subCols.length} });</p>
-<p class="p1"><span class="Apple-converted-space">        </span>sumRows.add(currentRow);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>currentRow++;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const finalRow = ['TỔNG CỘNG', '', '', '', '', ...subCols.map(()=&gt;''), costNhaThau + costTangGia];</p>
-<p class="p1"><span class="Apple-converted-space">    </span>aoa.push(finalRow);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>merges.push({ s: {r: currentRow, c:0}, e: {r: currentRow, c: 4 + subCols.length} });</p>
-<p class="p1"><span class="Apple-converted-space">    </span>sumRows.add(currentRow);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// TẠO WORKBOOK VÀ STYLE</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const ws = window.XLSX.utils.aoa_to_sheet(aoa);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>ws['!merges'] = merges;</p>
-<p class="p2"><span class="Apple-converted-space">    </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Đặt độ rộng cột (Column Widths)</p>
-<p class="p1"><span class="Apple-converted-space">    </span>ws['!cols'] = [</p>
-<p class="p1"><span class="Apple-converted-space">        </span>{wch: 5},<span class="Apple-converted-space">  </span>// STT</p>
-<p class="p1"><span class="Apple-converted-space">        </span>{wch: 35}, // Tên</p>
-<p class="p1"><span class="Apple-converted-space">        </span>{wch: 8},<span class="Apple-converted-space">  </span>// ĐVT</p>
-<p class="p1"><span class="Apple-converted-space">        </span>{wch: 12}, // Đơn giá</p>
-<p class="p1"><span class="Apple-converted-space">        </span>{wch: 10}, // Tổng</p>
-<p class="p1"><span class="Apple-converted-space">        </span>...subCols.map(() =&gt; ({wch: 8})), // Các cột con</p>
-<p class="p1"><span class="Apple-converted-space">        </span>{wch: 15}<span class="Apple-converted-space">  </span>// Thành tiền</p>
-<p class="p1"><span class="Apple-converted-space">    </span>];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Áp dụng định dạng Kẻ khung (Borders) &amp; CSS</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const borderAll = {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>top: { style: "thin", color: { rgb: "000000" } },</p>
-<p class="p1"><span class="Apple-converted-space">        </span>bottom: { style: "thin", color: { rgb: "000000" } },</p>
-<p class="p1"><span class="Apple-converted-space">        </span>left: { style: "thin", color: { rgb: "000000" } },</p>
-<p class="p1"><span class="Apple-converted-space">        </span>right: { style: "thin", color: { rgb: "000000" } }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const range = window.XLSX.utils.decode_range(ws['!ref']);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>for (let R = 0; R &lt;= range.e.r; ++R) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>for (let C = 0; C &lt;= range.e.c; ++C) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const cellRef = window.XLSX.utils.encode_cell({c: C, r: R});</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!ws[cellRef]) ws[cellRef] = { t: 's', v: '' }; // Điền ô trống để kẻ viền</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>let cellStyle = {};</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (R === 0) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>cellStyle = { font: { bold: true, sz: 16 }, alignment: { horizontal: "center", vertical: "center" } };</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else if (R === 2 || R === 3) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>cellStyle = { font: { bold: true }, fill: { fgColor: { rgb: "E2EFDA" } }, alignment: { horizontal: "center", vertical: "center", wrapText: true }, border: borderAll };</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else if (R &gt;= 4) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>cellStyle = { border: borderAll, alignment: { vertical: "center" } };</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (sectionRows.has(R)) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>cellStyle.font = { bold: true, color: { rgb: "000000" } };</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>cellStyle.fill = { fgColor: { rgb: "F2F2F2" } }; // Highlight xám nhạt</p>
-<p class="p1"><span class="Apple-converted-space">                </span>} else if (sumRows.has(R)) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>cellStyle.font = { bold: true };</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>if (C === 0) cellStyle.alignment = { horizontal: "right", vertical: "center" };</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>// Tự động thêm dấu phẩy phân cách hàng nghìn cho tiền/số lượng</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (typeof ws[cellRef].v === 'number') {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>const isMoneyCol = C === 3 || C === 5 + subCols.length || (sumRows.has(R) &amp;&amp; C === 5 + subCols.length);</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>cellStyle.numFmt = isMoneyCol ? "#,##0" : "0.###";</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>ws[cellRef].s = cellStyle;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const wb = window.XLSX.utils.book_new();</p>
-<p class="p1"><span class="Apple-converted-space">    </span>window.XLSX.utils.book_append_sheet(wb, ws, "BaoCao");</p>
-<p class="p2"><span class="Apple-converted-space">    </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Tải xuống file dưới dạng chuẩn XLSX</p>
-<p class="p1"><span class="Apple-converted-space">    </span>window.XLSX.writeFile(wb, `bang_ke_${title}.xlsx`);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>// --- SUB-COMPONENTS ---</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const renderPricesTable = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const filtered = prices.filter(p =&gt; p.name.toLowerCase().includes(searchPriceQuery.toLowerCase()))</p>
-<p class="p1"><span class="Apple-converted-space">                           </span>.sort((a, b) =&gt; getItemRank(a.name) - getItemRank(b.name));</p>
-<p class="p1"><span class="Apple-converted-space">    </span>return (</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div className="bg-white rounded-xl shadow-sm border border-slate-200 mt-6 overflow-hidden"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="p-4 border-b flex justify-between items-center bg-slate-50"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="relative w-1/3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;Search className="w-4 h-4 absolute left-3 top-3 text-slate-400" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;input<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">              </span>type="text" placeholder="Tra cứu thực phẩm trong danh sách..."<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">              </span>value={searchPriceQuery} onChange={e =&gt; setSearchPriceQuery(e.target.value)}</p>
-<p class="p1"><span class="Apple-converted-space">              </span>className="w-full pl-9 pr-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-emerald-500"</p>
-<p class="p1"><span class="Apple-converted-space">            </span>/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;button onClick={() =&gt; setShowDeleteModal(true)} className="text-red-500 flex items-center gap-2 text-sm hover:bg-red-50 px-3 py-2 rounded-lg transition-colors"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;Trash2 className="w-4 h-4" /&gt; Xóa toàn bộ danh mục</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;table className="w-full text-sm text-left"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;thead className="bg-slate-50 text-slate-500 font-semibold border-b"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="py-3 px-4 w-16"&gt;STT&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="py-3 px-4"&gt;TÊN THỰC PHẨM&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="py-3 px-4"&gt;ĐVT&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="py-3 px-4 text-right"&gt;GIÁ THỊ TRƯỜNG&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="py-3 px-4 text-right"&gt;GIÁ TĂNG GIA&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="py-3 px-4 text-center w-28"&gt;THAO TÁC&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/thead&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;tbody&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{filtered.length === 0 ? (</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;tr&gt;&lt;td colSpan="6" className="py-8 text-center text-slate-400 italic"&gt;Chưa có danh mục báo giá nào. Hãy thêm thủ công hoặc nhập từ Excel.&lt;/td&gt;&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>) : (</p>
-<p class="p1"><span class="Apple-converted-space">              </span>filtered.map((p, idx) =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">                </span>editingPriceId === p.id ? (</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;tr key={p.id} className="border-b bg-emerald-50/50"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;td className="py-2 px-4"&gt;{idx + 1}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;td className="py-2 px-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>{SYSTEM_PRICE_IDS.includes(p.id) ? (</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span className="font-semibold text-slate-600 block pt-2"&gt;{p.name} (Hệ thống)&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>) : (</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;input type="text" value={editPriceForm.name} onChange={e =&gt; setEditPriceForm({...editPriceForm, name: e.target.value})} className="w-full border p-1.5 rounded text-sm outline-none focus:border-emerald-500 bg-white" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>)}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;td className="py-2 px-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>{SYSTEM_PRICE_IDS.includes(p.id) ? (</p>
-<p class="p1"><span class="Apple-converted-space">                         </span>&lt;span className="text-slate-500 block pt-2"&gt;{p.unit}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>) : (</p>
-<p class="p1"><span class="Apple-converted-space">                         </span>&lt;input type="text" value={editPriceForm.unit} onChange={e =&gt; setEditPriceForm({...editPriceForm, unit: e.target.value})} className="w-full border p-1.5 rounded text-sm outline-none focus:border-emerald-500 bg-white" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>)}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;td className="py-2 px-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;input type="number" value={editPriceForm.marketPrice} onChange={e =&gt; setEditPriceForm({...editPriceForm, marketPrice: e.target.value})} className="w-full border p-1.5 rounded text-sm outline-none focus:border-blue-500 text-right bg-white" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;td className="py-2 px-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;input type="number" value={editPriceForm.farmPrice} onChange={e =&gt; setEditPriceForm({...editPriceForm, farmPrice: e.target.value})} className="w-full border p-1.5 rounded text-sm outline-none focus:border-emerald-500 text-right bg-white" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;td className="py-2 px-4 text-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                       </span>&lt;div className="flex justify-center gap-2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                         </span>&lt;button onClick={handleSaveEdit} className="text-emerald-600 hover:text-emerald-700 p-1.5 bg-white rounded shadow-sm border border-emerald-200" title="Lưu"&gt;&lt;Check className="w-4 h-4" /&gt;&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                         </span>&lt;button onClick={handleCancelEdit} className="text-slate-400 hover:text-red-500 p-1.5 bg-white rounded shadow-sm border border-slate-200" title="Hủy"&gt;&lt;X className="w-4 h-4" /&gt;&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                       </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>) : (</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;tr key={p.id} className="border-b hover:bg-slate-50"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;td className="py-3 px-4"&gt;{idx + 1}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;td className="py-3 px-4 font-medium text-slate-800"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>{p.name} {SYSTEM_PRICE_IDS.includes(p.id) &amp;&amp; &lt;span className="ml-2 text-[10px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded"&gt;Khóa&lt;/span&gt;}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;td className="py-3 px-4"&gt;{p.unit}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;td className="py-3 px-4 text-right text-blue-600"&gt;{formatCurrency(p.marketPrice)}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;td className="py-3 px-4 text-right text-emerald-600"&gt;{formatCurrency(p.farmPrice)}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;td className="py-3 px-4 text-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;div className="flex justify-center gap-3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button onClick={() =&gt; handleStartEdit(p)} className="text-slate-400 hover:text-blue-600 transition-colors" title="Chỉnh sửa"&gt;&lt;Pencil className="w-4 h-4" /&gt;&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                          </span>onClick={() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>if (SYSTEM_PRICE_IDS.includes(p.id)) return showToast('Không thể xóa mục mặc định của hệ thống!');</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>setPrices(prices.filter(item =&gt; item.id !== p.id));</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>}}<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                          </span>className={`${SYSTEM_PRICE_IDS.includes(p.id) ? 'text-slate-200 cursor-not-allowed' : 'text-slate-400 hover:text-red-600'} transition-colors`}<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                          </span>title="Xóa"</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&gt;&lt;Trash2 className="w-4 h-4" /&gt;&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>)</p>
-<p class="p1"><span class="Apple-converted-space">              </span>))</p>
-<p class="p1"><span class="Apple-converted-space">            </span>)}</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/tbody&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/table&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const renderDailySummary = () =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div className="mt-8 bg-white border border-emerald-500 rounded-xl overflow-hidden shadow-sm"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div className="bg-emerald-600 text-white p-4 flex justify-between items-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="text-xs text-emerald-100 font-semibold tracking-wider"&gt;DAILY LOGISTICS&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;h3 className="text-lg font-bold"&gt;Bảng Kê Trong Ngày - {DAYS[activeDay].name}&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button onClick={() =&gt; exportToExcel(dailyAgg, `ngay_${DAYS[activeDay].name}`, 'day')} className="bg-emerald-500 hover:bg-emerald-400 p-2 rounded-lg transition-colors" title="Xuất file Excel chuẩn"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;FileText className="w-5 h-5" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div className="p-4 grid grid-cols-3 gap-4 border-b"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="bg-slate-800 text-white p-4 rounded-xl flex flex-col justify-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="text-xs text-slate-400 mb-1 uppercase"&gt;Tổng dự toán ngày&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="text-2xl font-bold text-emerald-400"&gt;{formatCurrency(dailyAgg.totalCostNhaThau + dailyAgg.totalCostTangGia)}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="bg-slate-700 text-white p-4 rounded-xl flex flex-col justify-center col-span-2 flex-row items-center justify-around"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">           </span>&lt;div className="text-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="text-xs text-slate-300 mb-1 uppercase"&gt;Chi nhà thầu&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="text-xl font-bold"&gt;{formatCurrency(dailyAgg.totalCostNhaThau)}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">           </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">           </span>&lt;div className="w-px h-10 bg-slate-600"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">           </span>&lt;div className="text-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="text-xs text-slate-300 mb-1 uppercase"&gt;Hạch toán tăng gia&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="text-xl font-bold text-emerald-400"&gt;{formatCurrency(dailyAgg.totalCostTangGia)}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">           </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div className="p-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h4 className="font-bold text-blue-700 mb-3 flex items-center gap-2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="w-2 h-2 bg-blue-600 rounded-full"&gt;&lt;/div&gt; I. BẢO ĐẢM NHÀ THẦU</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;table className="w-full text-sm border-collapse border border-slate-200 mb-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;thead className="bg-slate-50 text-slate-600 text-xs text-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-2 w-10" rowSpan="2"&gt;STT&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-2 text-left" rowSpan="2"&gt;Tên Thực Phẩm&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-2 w-16" rowSpan="2"&gt;ĐVT&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-2 w-24 text-right" rowSpan="2"&gt;Đơn Giá&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-2" colSpan="4"&gt;SỐ LƯỢNG THỰC TẾ&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-2 w-32 text-right text-blue-700" rowSpan="2"&gt;Thành Tiền&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-1 w-16 text-blue-600 font-bold bg-blue-50"&gt;TỔNG&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-1 w-12 text-slate-500 font-normal"&gt;Sáng&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-1 w-12 text-slate-500 font-normal"&gt;Trưa&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-1 w-12 text-slate-500 font-normal"&gt;Chiều&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/thead&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;tbody&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{dailyAgg.nhaThau.length === 0 ? &lt;tr&gt;&lt;td colSpan="9" className="text-center p-4 text-slate-400"&gt;Không có dữ liệu&lt;/td&gt;&lt;/tr&gt; :<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">              </span>dailyAgg.nhaThau.map((item, idx) =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;tr key={idx} className="text-center hover:bg-slate-50"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className="border p-2"&gt;{idx + 1}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className="border p-2 text-left font-medium"&gt;{item.name}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className="border p-2"&gt;{item.unit}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className="border p-2 text-right"&gt;{formatCurrency(item.unitPrice)}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className="border p-2 font-bold text-blue-600 bg-blue-50/30"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                     </span>{item.priceId === 'p_tapchi' ? formatNum(item.totalQty) : formatQty(item.totalQty)}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className="border p-2 text-slate-600"&gt;{item.sangQty ? (item.priceId === 'p_tapchi' ? formatNum(item.sangQty) : formatQty(item.sangQty)) : '-'}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className="border p-2 text-slate-600"&gt;{item.truaQty ? (item.priceId === 'p_tapchi' ? formatNum(item.truaQty) : formatQty(item.truaQty)) : '-'}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className="border p-2 text-slate-600"&gt;{item.chieuQty ? (item.priceId === 'p_tapchi' ? formatNum(item.chieuQty) : formatQty(item.chieuQty)) : '-'}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className="border p-2 text-right font-medium"&gt;{formatCurrency(item.totalQty * item.unitPrice)}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>))</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/tbody&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/table&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h4 className="font-bold text-emerald-700 mb-3 flex items-center gap-2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="w-2 h-2 bg-emerald-600 rounded-full"&gt;&lt;/div&gt; II. TỰ KHAI THÁC, TĂNG GIA</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;table className="w-full text-sm border-collapse border border-slate-200"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">           </span>&lt;thead className="bg-slate-50 text-slate-600 text-xs text-center hidden"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-2 w-10"&gt;STT&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-2 text-left"&gt;Tên Thực Phẩm&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-2 w-16"&gt;ĐVT&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-2 w-24 text-right"&gt;Đơn Giá&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-2 w-16"&gt;TỔNG&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-2 w-12"&gt;Sáng&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-2 w-12"&gt;Trưa&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-2 w-12"&gt;Chiều&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-2 w-32 text-right"&gt;Thành Tiền&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/thead&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;tbody&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{dailyAgg.tangGia.length === 0 ? &lt;tr&gt;&lt;td colSpan="9" className="text-center border p-4 text-slate-400"&gt;Không có dữ liệu&lt;/td&gt;&lt;/tr&gt; :<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">              </span>dailyAgg.tangGia.map((item, idx) =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;tr key={idx} className="text-center hover:bg-slate-50"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className="border p-2 w-10"&gt;{idx + 1}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className="border p-2 text-left font-medium"&gt;{item.name}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className="border p-2 w-16"&gt;{item.unit}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className="border p-2 w-24 text-right"&gt;{formatCurrency(item.unitPrice)}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className="border p-2 w-16 font-bold text-emerald-600 bg-emerald-50/30"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                     </span>{item.priceId === 'p_tapchi' ? formatNum(item.totalQty) : formatQty(item.totalQty)}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className="border p-2 w-12 text-slate-600"&gt;{item.sangQty ? (item.priceId === 'p_tapchi' ? formatNum(item.sangQty) : formatQty(item.sangQty)) : '-'}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className="border p-2 w-12 text-slate-600"&gt;{item.truaQty ? (item.priceId === 'p_tapchi' ? formatNum(item.truaQty) : formatQty(item.truaQty)) : '-'}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className="border p-2 w-12 text-slate-600"&gt;{item.chieuQty ? (item.priceId === 'p_tapchi' ? formatNum(item.chieuQty) : formatQty(item.chieuQty)) : '-'}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className="border p-2 w-32 text-right font-medium text-emerald-700"&gt;{formatCurrency(item.totalQty * item.unitPrice)}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>))</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/tbody&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/table&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const renderAggTable = (dataObj, type = 'week') =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const subCols = type === 'week' ? DAYS.map(d =&gt; d.name.replace('Thứ ', 'T').replace('Chủ Nhật', 'CN')) : WEEKS.map(w =&gt; `Tuần ${w+1}`);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const qtyKeys = type === 'week' ? DAYS.map(d =&gt; d.id) : WEEKS;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const qtyProp = type === 'week' ? 'dayQty' : 'weekQty';</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const renderSection = (list, title, titleColor, dotColor, isTangGia = false) =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div className="mb-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">         </span>&lt;h4 className={`font-bold ${titleColor} mb-3 flex items-center gap-2`}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className={`w-2 h-2 ${dotColor} rounded-full`}&gt;&lt;/div&gt; {title}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;table className="w-full text-sm border-collapse border border-slate-200"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;thead className="bg-slate-50 text-slate-600 text-xs text-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">             </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-2 w-10" rowSpan="2"&gt;STT&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-2 text-left" rowSpan="2"&gt;Tên Thực Phẩm&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-2 w-12" rowSpan="2"&gt;ĐVT&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-2 w-24 text-right" rowSpan="2"&gt;Đơn Giá&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-2" colSpan={subCols.length + 1}&gt;SỐ LƯỢNG THỰC TẾ&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className={`border p-2 w-32 text-right ${isTangGia ? 'text-emerald-700' : 'text-blue-700'}`} rowSpan="2"&gt;Thành Tiền&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;th className="border p-1 w-12 text-blue-600 font-bold bg-blue-50"&gt;TỔNG&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>{subCols.map((c, i) =&gt; &lt;th key={i} className="border p-1 w-10 text-slate-500 font-normal"&gt;{c}&lt;/th&gt;)}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/thead&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;tbody&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{list.length === 0 ? &lt;tr&gt;&lt;td colSpan={subCols.length + 6} className="text-center p-4 text-slate-400"&gt;Không có dữ liệu&lt;/td&gt;&lt;/tr&gt; :<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">              </span>list.map((item, idx) =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;tr key={idx} className="text-center hover:bg-slate-50"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className="border p-2"&gt;{idx + 1}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className="border p-2 text-left font-medium"&gt;{item.name}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className="border p-2"&gt;{item.unit}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className="border p-2 text-right"&gt;{formatCurrency(item.unitPrice)}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className="border p-2 font-bold text-blue-600 bg-blue-50/30"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                     </span>{item.priceId === 'p_tapchi' ? formatNum(item.totalQty) : formatQty(item.totalQty)}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>{qtyKeys.map(k =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;td key={k} className="border p-1 text-slate-500"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                       </span>{item[qtyProp][k] ? (item.priceId === 'p_tapchi' ? formatNum(item[qtyProp][k]) : formatQty(item[qtyProp][k])) : '-'}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>))}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;td className={`border p-2 text-right font-medium ${isTangGia ? 'text-emerald-700' : ''}`}&gt;{formatCurrency(item.totalQty * item.unitPrice)}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>))</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">             </span>&lt;tr className="bg-slate-50 font-bold"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">               </span>&lt;td colSpan={subCols.length + 5} className="border p-2 text-right"&gt;Cộng khoản {isTangGia ? 'Tăng Gia' : 'Nhà Thầu'}:&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">               </span>&lt;td className={`border p-2 text-right ${isTangGia ? 'text-emerald-700' : 'text-blue-700'}`}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>{formatCurrency(isTangGia ? dataObj.totalCostTangGia : dataObj.totalCostNhaThau)}</p>
-<p class="p1"><span class="Apple-converted-space">               </span>&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">             </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/tbody&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/table&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>return (</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div className="bg-white rounded-xl shadow-sm border border-slate-200 mt-6 overflow-hidden"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="bg-emerald-600 p-4 text-white flex justify-between items-center rounded-t-xl mx-4 mt-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="text-xs text-emerald-100 font-semibold tracking-wider uppercase"&gt;Logistics Table&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h3 className="text-xl font-bold"&gt;Sổ Tổng Hợp Chi Tiết&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;FileText className="w-6 h-6 opacity-50" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="p-4 mx-4 mt-2 grid grid-cols-3 gap-4 border-b pb-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="bg-slate-800 text-white p-6 rounded-xl flex flex-col justify-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="text-xs text-slate-400 mb-1 uppercase"&gt;Tổng dự toán {type === 'week' ? 'Tuần' : 'Tháng'}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="text-3xl font-bold text-emerald-400"&gt;{formatCurrency(dataObj.totalCostNhaThau + dataObj.totalCostTangGia)}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="bg-slate-700 text-white p-4 rounded-xl flex flex-col justify-center col-span-2 flex-row items-center justify-around"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">             </span>&lt;div className="text-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div className="text-xs text-slate-300 mb-1 uppercase"&gt;Chi nhà thầu&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div className="text-2xl font-bold"&gt;{formatCurrency(dataObj.totalCostNhaThau)}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">             </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">             </span>&lt;div className="w-px h-12 bg-slate-600"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">             </span>&lt;div className="text-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div className="text-xs text-slate-300 mb-1 uppercase"&gt;Hạch toán tăng gia&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div className="text-2xl font-bold text-emerald-400"&gt;{formatCurrency(dataObj.totalCostTangGia)}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">             </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="p-4 mx-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>{renderSection(dataObj.nhaThau, "I. BẢO ĐẢM NHÀ THẦU", "text-blue-700", "bg-blue-600")}</p>
-<p class="p1"><span class="Apple-converted-space">          </span>{renderSection(dataObj.tangGia, "II. TỰ KHAI THÁC, TĂNG GIA", "text-emerald-700", "bg-emerald-600", true)}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="p-6 border-t bg-slate-50 flex justify-center gap-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">           </span>&lt;button className="px-6 py-2 border border-slate-300 rounded-lg bg-white font-medium flex items-center gap-2 hover:bg-slate-100 transition-colors"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;Printer className="w-4 h-4" /&gt; IN BẢNG KÊ</p>
-<p class="p1"><span class="Apple-converted-space">           </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">           </span>&lt;button onClick={() =&gt; exportToExcel(dataObj, type === 'week' ? `tuan_${activeWeek+1}` : 'thang', type)} className="px-6 py-2 rounded-lg bg-emerald-600 text-white font-medium flex items-center gap-2 hover:bg-emerald-500 transition-colors" title="Xuất file Excel chuẩn (.xlsx)"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;Download className="w-4 h-4" /&gt; XUẤT FILE EXCEL</p>
-<p class="p1"><span class="Apple-converted-space">           </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>// --- RENDER MAIN LAYOUT ---</p>
-<p class="p1"><span class="Apple-converted-space">  </span>return (</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div className="min-h-screen bg-[#f8fafc] font-sans text-slate-800"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">      </span></p>
-<p class="p1"><span class="Apple-converted-space">      </span>{/* Ẩn các nút mũi tên tăng giảm số mặc định của trình duyệt để ô nhập rộng rãi hơn */}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;style&gt;{`</p>
-<p class="p1"><span class="Apple-converted-space">        </span>input[type="number"]::-webkit-inner-spin-button,</p>
-<p class="p1"><span class="Apple-converted-space">        </span>input[type="number"]::-webkit-outer-spin-button {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>-webkit-appearance: none;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>margin: 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>input[type="number"] {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>-moz-appearance: textfield;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>`}&lt;/style&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>{/* Ẩn thẻ input file */}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;input<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>type="file"<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>ref={fileInputRef}<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>onChange={handleFileUpload}<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>accept=".xlsx, .xls, .csv"<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>style={{ display: 'none' }}<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">      </span>/&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>{/* Pop-up Xác nhận xóa */}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{showDeleteModal &amp;&amp; (</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="fixed inset-0 bg-slate-900/50 flex items-center justify-center z-50 animate-in fade-in duration-200"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full mx-4 border border-slate-200"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="flex items-center gap-3 text-red-500 mb-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;AlertCircle className="w-6 h-6" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;h3 className="text-xl font-bold text-slate-800"&gt;Xác nhận xóa&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;p className="text-slate-600 mb-6 leading-relaxed"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>Bạn có chắc chắn muốn xóa toàn bộ danh mục báo giá? Mọi dữ liệu hiện tại sẽ bị mất và &lt;span className="font-semibold text-red-500"&gt;không thể hoàn tác&lt;/span&gt;.</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="flex justify-end gap-3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;button<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>onClick={() =&gt; setShowDeleteModal(false)}<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-xl font-medium transition-colors"</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>Hủy bỏ</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;button<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>onClick={handleDeleteAllPrices}<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl font-medium transition-colors shadow-sm"</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>Tiếp tục xóa</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>)}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>{/* Toast Notification */}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{toast &amp;&amp; (</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="fixed top-4 right-4 bg-slate-800 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 z-50 animate-bounce"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;Check className="w-5 h-5 text-emerald-400" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;span className="text-sm font-medium"&gt;{toast}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>)}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>{/* HEADER */}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;header className="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="flex items-center gap-3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="bg-emerald-500 p-2 rounded-xl text-white shadow-sm"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;ShoppingCart className="w-6 h-6" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;h1 className="text-xl font-bold tracking-tight text-slate-800 leading-none"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>TRỢ LÝ &lt;span className="text-emerald-600"&gt;BÁO PHẨM&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;p className="text-[10px] text-slate-500 uppercase tracking-wider mt-1 font-semibold"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>Được tạo bởi Thiên Trường Đẹp Trai - Đại Đội 29 / Phòng HC-KT</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">          </span></p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="flex bg-slate-100 p-1 rounded-full text-sm font-medium border border-slate-200 shadow-inner"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;button onClick={() =&gt; setActiveTab('baogia')} className={`flex items-center gap-2 px-5 py-2 rounded-full transition-all ${activeTab === 'baogia' ? 'bg-white shadow-sm text-emerald-700' : 'text-slate-500 hover:text-slate-700'}`}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;List className="w-4 h-4" /&gt; Báo giá</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;button onClick={() =&gt; setActiveTab('thucdon')} className={`flex items-center gap-2 px-5 py-2 rounded-full transition-all ${activeTab === 'thucdon' ? 'bg-white shadow-sm text-emerald-700' : 'text-slate-500 hover:text-slate-700'}`}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;FileText className="w-4 h-4" /&gt; Thực đơn</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;button onClick={() =&gt; setActiveTab('tuan')} className={`flex items-center gap-2 px-5 py-2 rounded-full transition-all ${activeTab === 'tuan' ? 'bg-white shadow-sm text-emerald-700' : 'text-slate-500 hover:text-slate-700'}`}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;Calendar className="w-4 h-4" /&gt; Bảng Kê Tuần</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">             </span>&lt;button onClick={() =&gt; setActiveTab('thang')} className={`flex items-center gap-2 px-5 py-2 rounded-full transition-all ${activeTab === 'thang' ? 'bg-white shadow-sm text-emerald-700' : 'text-slate-500 hover:text-slate-700'}`}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;Calendar className="w-4 h-4" /&gt; Bảng Kê Tháng</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/header&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;main className="max-w-6xl mx-auto px-4 py-8"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>{/* --- VIEW: BÁO GIÁ --- */}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>{activeTab === 'baogia' &amp;&amp; (</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="animate-in fade-in slide-in-from-bottom-4 duration-500"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="bg-[#1e293b] rounded-t-2xl p-6 text-white flex justify-between items-center shadow-lg"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="flex items-center gap-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div className="bg-white/10 p-3 rounded-xl border border-white/20"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;span className="text-xl font-bold"&gt;$&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;h2 className="text-2xl font-bold"&gt;Danh Mục Báo Giá&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;p className="text-slate-300 text-sm mt-1"&gt;Quản lý nguyên liệu, giá thị trường &amp; giá tăng gia ({prices.length}/1000)&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="text-right"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onClick={triggerFileInput} className="bg-emerald-500 hover:bg-emerald-400 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors shadow-sm"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;Upload className="w-4 h-4" /&gt; Nhập từ Excel</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p className="text-[10px] text-slate-400 mt-2 italic"&gt;Cột: [Tên thực phẩm] | [ĐVT] | [Giá TT] | [Giá TG]&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="bg-white border border-slate-200 border-t-0 rounded-b-2xl p-6 shadow-sm"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;div className="grid grid-cols-5 gap-4 items-end"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div className="col-span-2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;label className="block text-xs font-bold text-slate-500 uppercase mb-2"&gt;TÊN THỰC PHẨM&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;input type="text" placeholder="VD: Thịt lợn..." className="w-full border p-2.5 rounded-lg text-sm focus:border-emerald-500 outline-none bg-slate-50"<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>value={newPrice.name} onChange={e =&gt; setNewPrice({...newPrice, name: e.target.value})} /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;label className="block text-xs font-bold text-slate-500 uppercase mb-2"&gt;ĐVT&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;input type="text" className="w-full border p-2.5 rounded-lg text-sm focus:border-emerald-500 outline-none bg-slate-50"<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>value={newPrice.unit} onChange={e =&gt; setNewPrice({...newPrice, unit: e.target.value})} /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;label className="block text-xs font-bold text-blue-500 uppercase mb-2"&gt;GIÁ THỊ TRƯỜNG&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;input type="number" placeholder="VD: 150000" className="w-full border border-blue-200 p-2.5 rounded-lg text-sm focus:border-blue-500 outline-none bg-blue-50/30"<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>value={newPrice.marketPrice} onChange={e =&gt; setNewPrice({...newPrice, marketPrice: e.target.value})} /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;label className="block text-xs font-bold text-emerald-500 uppercase mb-2"&gt;GIÁ TĂNG GIA&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;div className="flex gap-2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;input type="number" placeholder="VD: 120000" className="w-full border border-emerald-200 p-2.5 rounded-lg text-sm focus:border-emerald-500 outline-none bg-emerald-50/30"<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                      </span>value={newPrice.farmPrice} onChange={e =&gt; setNewPrice({...newPrice, farmPrice: e.target.value})} /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button onClick={handleAddPrice} className="bg-[#1e293b] hover:bg-slate-800 text-white px-4 rounded-lg flex items-center justify-center transition-colors"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;Plus className="w-5 h-5" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>{renderPricesTable()}</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>)}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>{/* --- VIEW: THỰC ĐƠN --- */}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>{activeTab === 'thucdon' &amp;&amp; (</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="animate-in fade-in slide-in-from-bottom-4 duration-500"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{/* WEEKS TABS */}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="flex gap-2 mb-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>{WEEKS.map(w =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button key={w} onClick={() =&gt; setActiveWeek(w)}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>className={`px-6 py-2 rounded-full text-sm font-bold border transition-all ${activeWeek === w ? 'bg-emerald-500 text-white border-emerald-600 shadow-md transform -translate-y-0.5' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}`}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>Tuần {w + 1}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>))}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>{/* DAYS TABS */}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="flex gap-2 mb-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>{DAYS.map(d =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button key={d.id} onClick={() =&gt; setActiveDay(d.id)}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-sm border ${activeDay === d.id ? 'bg-[#1e293b] text-white border-slate-800' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}`}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>{d.name}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>))}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>{/* MEALS SECTIONS */}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="space-y-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>{MEALS.map(meal =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const mealData = menuData[activeWeek][activeDay][meal.id];</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const autoCalc = getMealAutoCalc(activeWeek, activeDay, meal.id);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const mealActualCost = autoCalc.dishesCost + autoCalc.gasCost + autoCalc.tapChiCost;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const standardBudget = autoCalc.totalStandard;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const budgetDiff = standardBudget - mealActualCost; // Dư ngân sách</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>return (</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div key={meal.id} className={`border-2 ${meal.border} rounded-2xl bg-white shadow-sm`}&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                  </span></p>
-<p class="p1"><span class="Apple-converted-space">                  </span>{/* Meal Header */}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;div className={`p-4 ${meal.bg} flex items-center justify-between border-b ${meal.border} rounded-t-xl`}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div className="flex items-center gap-3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;div className={`p-2 bg-white rounded-lg shadow-sm ${meal.color}`}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;meal.icon className="w-6 h-6" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;h3 className={`text-xl font-bold ${meal.color}`}&gt;{meal.name}&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div className="flex items-center gap-4 bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;div className="flex items-center gap-2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span className="text-xs font-bold text-slate-400 uppercase"&gt;Số người:&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;input type="number" value={mealData.people || ''} onChange={e =&gt; updateMealInfo(meal.id, 'people', e.target.value)}<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                          </span>className="w-16 font-bold text-lg text-center outline-none border-b focus:border-emerald-500" placeholder="0" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;div className="w-px h-6 bg-slate-200"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;div className="flex items-center gap-2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span className="text-xs font-bold text-slate-400 uppercase"&gt;Tiêu chuẩn:&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;input type="number" value={mealData.standard || ''} onChange={e =&gt; updateMealInfo(meal.id, 'standard', e.target.value)}<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                          </span>className="w-24 font-bold text-lg text-center outline-none border-b focus:border-emerald-500 text-emerald-600" placeholder="0" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                  </span>{/* Budget Comparison */}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>{standardBudget &gt; 0 &amp;&amp; (</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div className="px-6 py-2 bg-slate-50 border-b flex justify-between text-sm items-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                       </span>&lt;span className="text-slate-500 font-medium"&gt;Tổng tiêu chuẩn: &lt;strong className="text-slate-800"&gt;{formatCurrency(standardBudget)}&lt;/strong&gt;&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                       </span>&lt;span className="text-slate-500 font-medium"&gt;Thực tế: &lt;strong className={mealActualCost &gt; standardBudget ? 'text-red-500' : 'text-blue-600'}&gt;{formatCurrency(mealActualCost)}&lt;/strong&gt;&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                       </span>{budgetDiff &gt;= 0 ?<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                          </span>&lt;span className="text-emerald-600 font-semibold bg-emerald-100 px-2 py-0.5 rounded"&gt;Dư: {formatCurrency(budgetDiff)}&lt;/span&gt; :</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>&lt;span className="text-red-500 font-semibold bg-red-100 px-2 py-0.5 rounded"&gt;Vượt: {formatCurrency(Math.abs(budgetDiff))}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                       </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>)}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                  </span>{/* Dishes Container */}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;div className="p-6"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>{/* AUTO CALC BLOCK: Món 1 (Chất đốt) &amp; Tạp chi gia vị */}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>{standardBudget &gt; 0 &amp;&amp; (</p>
-<p class="p1"><span class="Apple-converted-space">                       </span>&lt;div className="border border-blue-200 rounded-xl bg-blue-50 overflow-hidden mb-6 shadow-sm"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>&lt;div className="p-2.5 bg-blue-600 text-white flex justify-between items-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>&lt;span className="font-bold text-xs uppercase tracking-wider flex items-center gap-2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                 </span>&lt;div className="w-2 h-2 rounded-full bg-blue-300"&gt;&lt;/div&gt; Hạch toán mặc định</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>&lt;span className="text-xs font-medium text-blue-200"&gt;Tự động tính từ Tiêu chuẩn&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>&lt;div className="p-3 text-sm flex gap-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                             </span>&lt;div className="flex-1 flex justify-between items-center bg-white p-3 rounded-lg border border-blue-100 shadow-sm"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;span className="font-medium text-slate-600"&gt;Món 1: Chất đốt &lt;span className="text-xs text-blue-500 font-bold bg-blue-50 px-1 rounded ml-1"&gt;(5%)&lt;/span&gt;&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;span className="font-bold text-blue-700"&gt;{formatCurrency(autoCalc.gasCost)}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                             </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                             </span>&lt;div className="flex-1 flex justify-between items-center bg-white p-3 rounded-lg border border-blue-100 shadow-sm"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;span className="font-medium text-slate-600"&gt;Tạp chi gia vị &lt;span className="text-xs text-emerald-500 font-bold bg-emerald-50 px-1 rounded ml-1"&gt;(Số dư)&lt;/span&gt;&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;span className="font-bold text-emerald-600"&gt;{formatCurrency(autoCalc.tapChiCost)}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                             </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                       </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>)}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>{/* DYNAMIC DISHES */}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div className="space-y-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>{mealData.dishes.length === 0 ? (</p>
-<p class="p1"><span class="Apple-converted-space">                         </span>&lt;button onClick={() =&gt; addDish(meal.id)} className={`w-full py-4 border-2 border-dashed rounded-xl font-bold flex items-center justify-center gap-2 transition-colors ${meal.btn}`}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>&lt;Plus className="w-5 h-5" /&gt; THÊM MÓN THỰC TẾ</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>) : (</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>{mealData.dishes.map((dish, dIdx) =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div key={dish.id} className="border border-slate-200 rounded-xl bg-slate-50 group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>&lt;div className="flex"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>{/* Dish Info */}</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;div className="w-1/3 p-4 border-r border-slate-200 bg-white rounded-l-xl"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                  </span>&lt;label className="flex text-[10px] font-bold text-orange-600 mb-1 gap-1 uppercase"&gt;Món {dIdx + 2} &lt;span className="text-slate-400"&gt;Tên món ăn&lt;/span&gt;&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                  </span>&lt;input type="text" value={dish.name} onChange={e =&gt; updateDishName(meal.id, dish.id, e.target.value)}</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>placeholder="VD: Thịt lợn kho tàu" className="w-full border p-2 rounded-lg text-sm font-medium focus:border-emerald-500 outline-none" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                                </span></p>
-<p class="p1"><span class="Apple-converted-space">                                </span>{/* Ingredients */}</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;div className="w-2/3 p-4 relative"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                  </span>&lt;button onClick={() =&gt; removeDish(meal.id, dish.id)} className="absolute top-2 right-2 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;Trash2 className="w-4 h-4" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                  </span>&lt;/button&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                                  </span></p>
-<p class="p1"><span class="Apple-converted-space">                                  </span>&lt;div className="text-[10px] font-bold text-slate-400 mb-2 uppercase tracking-wide flex px-1"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;div className="w-[26%]"&gt;Nguyên liệu&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;div className="w-[12%]"&gt;Nguồn Cung&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;div className="w-[14%] text-center"&gt;Đơn giá&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;div className="w-[34%] text-center" title="Số lượng dành cho 1 người"&gt;Định lượng/1 người&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;div className="w-[14%] text-right pr-6" title="Tổng tiền = Đơn giá x Định lượng x Số người"&gt;Tổng tiền&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                                  </span>&lt;div className="space-y-2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>{dish.ingredients.map((ing, ingIdx) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                                      </span>const pInfo = prices.find(p=&gt;p.id===ing.priceId);</p>
-<p class="p2"><span class="Apple-converted-space">                                      </span></p>
-<p class="p1"><span class="Apple-converted-space">                                      </span>const baseUnit = pInfo?.unit || '-';</p>
-<p class="p1"><span class="Apple-converted-space">                                      </span>const isKg = baseUnit.toLowerCase() === 'kg';</p>
-<p class="p1"><span class="Apple-converted-space">                                      </span>const displayUnit = isKg ? 'g' : baseUnit;</p>
-<p class="p1"><span class="Apple-converted-space">                                      </span>const actualQtyPerPerson = isKg ? Number(ing.qty) / 1000 : Number(ing.qty);</p>
-<p class="p1"><span class="Apple-converted-space">                                      </span>const peopleCount = Number(mealData.people) || 0;</p>
-<p class="p2"><span class="Apple-converted-space">                                      </span></p>
-<p class="p1"><span class="Apple-converted-space">                                      </span>const unitPrice = getUnitPrice(ing.priceId, ing.source);</p>
-<p class="p1"><span class="Apple-converted-space">                                      </span>const total = unitPrice * actualQtyPerPerson * peopleCount;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                                      </span>return (</p>
-<p class="p1"><span class="Apple-converted-space">                                      </span>&lt;div key={ing.id} className="flex gap-2 items-center bg-white p-1 rounded-lg border border-slate-200 shadow-sm relative" style={{ zIndex: 50 - ingIdx }}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>{/* Ingredient Select */}</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;div className="w-[26%]"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                          </span>&lt;SearchableSelect<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                                            </span>options={prices}</p>
-<p class="p1"><span class="Apple-converted-space">                                            </span>value={ing.priceId}</p>
-<p class="p1"><span class="Apple-converted-space">                                            </span>onChange={(newId) =&gt; updateIngredient(meal.id, dish.id, ing.id, 'priceId', newId)}</p>
-<p class="p1"><span class="Apple-converted-space">                                            </span>placeholder="-- Chọn NL --"</p>
-<p class="p1"><span class="Apple-converted-space">                                          </span>/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                                        </span></p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>{/* Source Select */}</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;div className="w-[12%]"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                          </span>&lt;select value={ing.source} onChange={e =&gt; updateIngredient(meal.id, dish.id, ing.id, 'source', e.target.value)}</p>
-<p class="p1"><span class="Apple-converted-space">                                            </span>className={`w-full text-xs p-1 rounded font-medium outline-none cursor-pointer border ${ing.source === 'nhathau' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200'}`}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;option value="nhathau"&gt;Nhà thầu&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;option value="tanggia"&gt;Tăng gia&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                          </span>&lt;/select&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>{/* Unit Price Display */}</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;div className="w-[14%] text-center text-xs font-semibold text-slate-600 bg-slate-50 py-1.5 rounded border border-slate-100 truncate px-1" title={ing.priceId &amp;&amp; pInfo ? `${formatCurrency(unitPrice)} / ${baseUnit}` : ''}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                          </span>{ing.priceId &amp;&amp; pInfo ? `${formatCurrency(unitPrice)} / ${baseUnit}` : '-'}</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>{/* Qty Input &amp; Display */}</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;div className="w-[34%] flex items-center gap-1"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                           </span>{isKg ? (</p>
-<p class="p1"><span class="Apple-converted-space">                                              </span>&lt;&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                                </span>{/* Grams Input */}</p>
-<p class="p1"><span class="Apple-converted-space">                                                </span>&lt;div className="flex-1 flex items-center bg-slate-50 rounded border border-slate-300 overflow-hidden focus-within:border-emerald-500 focus-within:ring-1 focus-within:ring-emerald-500 transition-all cursor-text" title="Nhập số Gram"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                                   </span>&lt;input type="number" value={ing.qty || ''} onChange={e =&gt; updateIngredient(meal.id, dish.id, ing.id, 'qty', e.target.value)}</p>
-<p class="p1"><span class="Apple-converted-space">                                                    </span>className="w-full bg-transparent text-sm text-right font-bold outline-none py-1.5 pl-2 pr-1 min-w-[20px] text-slate-800" placeholder="0" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                                   </span>&lt;span className="text-[11px] text-slate-500 font-bold pr-2 pl-1 bg-slate-200/40 h-full flex items-center border-l border-slate-200"&gt;g&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                                </span>{/* Kg Display */}</p>
-<p class="p1"><span class="Apple-converted-space">                                                </span>&lt;div className="flex-1 flex items-center bg-emerald-50 rounded border border-emerald-300 overflow-hidden shadow-inner cursor-not-allowed" title="Quy đổi tự động ra Kg (Chỉ đọc)"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                                   </span>&lt;div className="w-full text-sm text-right font-bold text-emerald-800 py-1.5 pl-2 pr-1 truncate select-none"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                                     </span>{ing.qty ? formatQty(Number(ing.qty) / 1000) : '0'}</p>
-<p class="p1"><span class="Apple-converted-space">                                                   </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                                   </span>&lt;span className="text-[11px] text-emerald-600 font-bold pr-2 pl-1 bg-emerald-100 h-full flex items-center border-l border-emerald-200 select-none"&gt;kg&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                              </span>&lt;/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                           </span>) : (</p>
-<p class="p1"><span class="Apple-converted-space">                                              </span>&lt;div className="w-full flex items-center bg-slate-50 rounded border border-slate-300 overflow-hidden focus-within:border-emerald-500 focus-within:ring-1 focus-within:ring-emerald-500 transition-all cursor-text"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                                 </span>&lt;input type="number" value={ing.qty || ''} onChange={e =&gt; updateIngredient(meal.id, dish.id, ing.id, 'qty', e.target.value)}</p>
-<p class="p1"><span class="Apple-converted-space">                                                  </span>className="w-full bg-transparent text-sm text-right font-bold outline-none py-1.5 pl-2 pr-1 min-w-[20px] text-slate-800" placeholder="0" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                                 </span>&lt;span className="text-[11px] text-slate-500 font-bold pr-2 pl-1 bg-slate-200/40 h-full flex items-center border-l border-slate-200 truncate max-w-[40px] justify-center"&gt;{displayUnit}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                              </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                           </span>)}</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>{/* Total */}</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;div className="w-[14%] text-right font-bold text-blue-600 text-sm"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                          </span>{formatCurrency(total)}</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>{/* Delete Ing */}</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;button onClick={() =&gt; removeIngredient(meal.id, dish.id, ing.id)} className="text-slate-300 hover:text-red-500 w-6 flex justify-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                          </span>&lt;Trash2 className="w-3.5 h-3.5" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>)})}</p>
-<p class="p1"><span class="Apple-converted-space">                                  </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                                  </span></p>
-<p class="p1"><span class="Apple-converted-space">                                  </span>&lt;button onClick={() =&gt; addIngredient(meal.id, dish.id)} className="text-xs font-bold text-orange-600 mt-3 flex items-center gap-1 hover:text-orange-700"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;Plus className="w-3 h-3" /&gt; THÊM NGUYÊN LIỆU</p>
-<p class="p1"><span class="Apple-converted-space">                                  </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>))}</p>
-<p class="p2"><span class="Apple-converted-space">                          </span></p>
-<p class="p1"><span class="Apple-converted-space">                          </span>&lt;div className="flex justify-center mt-2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                             </span>&lt;button onClick={() =&gt; addDish(meal.id)} className={`px-6 py-2 rounded-full font-bold flex items-center justify-center gap-2 border bg-white shadow-sm transition-colors text-slate-600 hover:text-slate-800 hover:bg-slate-50`}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                              </span>&lt;Plus className="w-4 h-4" /&gt; Thêm món nữa</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                      </span>)}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>)})}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>{/* DAILY SUMMARY AT BOTTOM OF THUCDON */}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{renderDailySummary()}</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>)}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>{/* --- VIEW: BẢNG KÊ TUẦN --- */}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>{activeTab === 'tuan' &amp;&amp; (</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="animate-in fade-in slide-in-from-bottom-4 duration-500"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="text-center mb-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;h2 className="text-3xl font-bold text-[#1e293b] uppercase"&gt;BẢNG KÊ BẢO ĐẢM TUẦN {activeWeek + 1}&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;p className="text-slate-500 mt-1"&gt;Tổng hợp khối lượng thực phẩm và dự toán kinh phí từ Thứ Hai đến Chủ Nhật&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">             </span></p>
-<p class="p1"><span class="Apple-converted-space">             </span>{/* WEEKS TABS for fast switching */}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="flex justify-center gap-2 mb-2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>{WEEKS.map(w =&gt; (</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button key={w} onClick={() =&gt; setActiveWeek(w)}</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${activeWeek === w ? 'bg-slate-800 text-white shadow-md' : 'bg-white text-slate-600 border hover:bg-slate-50'}`}&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                  </span>Tuần {w + 1}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>))}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>{renderAggTable(weeklyAgg, 'week')}</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>)}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>{/* --- VIEW: BẢNG KÊ THÁNG --- */}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>{activeTab === 'thang' &amp;&amp; (</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div className="animate-in fade-in slide-in-from-bottom-4 duration-500"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div className="text-center mb-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;h2 className="text-3xl font-bold text-[#1e293b] uppercase"&gt;BẢNG TỔNG HỢP THÁNG&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">              </span>&lt;p className="text-slate-500 mt-1"&gt;Tổng hợp toàn bộ khối lượng thực phẩm và dự toán kinh phí trong 5 tuần&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{renderAggTable(monthlyAgg, 'month')}</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>)}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/main&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>);</p>
-<p class="p1">}</p>
-</body>
-</html>
+<body class="bg-surface text-on-surface selection:bg-primary/30 selection:text-primary">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/40 dark:bg-[#131313]/40 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+<div class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto relative">
+<div class="text-2xl font-serif font-bold text-[#ffb4cb] tracking-tighter">CENTALUX</div>
+<div class="hidden md:flex items-center gap-10">
+<a class="text-[#e5e2e1]/70 font-label font-medium hover:text-[#ffb4cb] transition-colors hover:scale-105 transition-all duration-300" href="#activities">Activities</a>
+<a class="text-[#e5e2e1]/70 font-label font-medium hover:text-[#ffb4cb] transition-colors hover:scale-105 transition-all duration-300" href="#benefits">Benefits</a>
+<a class="text-[#e5e2e1]/70 font-label font-medium hover:text-[#ffb4cb] transition-colors hover:scale-105 transition-all duration-300" href="#founders">Founders</a>
+</div>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary-fixed px-6 py-2.5 rounded-full font-bold tracking-tight hover:scale-105 active:scale-95 transition-all duration-300 neon-glow-primary">
+                Connect Now
+            </button>
+<div class="bg-gradient-to-r from-transparent via-[#534247]/20 to-transparent h-[1px] w-full absolute bottom-0 left-0"></div>
+</div>
+</nav>
+<!-- Hero Section -->
+<header class="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img alt="CENTALUX Hero Background" class="w-full h-full object-cover opacity-40 mix-blend-screen" data-alt="Soft ethereal light forming a central heart-shaped glow with silhouetted figures holding hands in a circle against a dark warm background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHa35P8ex8fEMKIJpNI3JvZf6d2dZP8ax2Za2T0ASQxVcDaW2iuRBagwyiMPwsdK-S2YF6SDtWJqaPPG4ufTT3hJWcqYuA2LbZ3VQ9oK-GOk0xzzo4mvaLmiPUuS7enDOnOdQWcSBwTD7-BLuixbSO7ofWNNN5cKYwFEy1i8Vyx9dYA5mH5eLYxWpKvU9MDP_3A4iU0gKQ8Um33doVfsxge8_ikQCFgqiVQdYaoIiuqKqRmeSSuZLHy58Y3A4LquMdprfnIIaWbhC9"/>
+<div class="absolute inset-0 bg-gradient-to-b from-surface via-transparent to-surface"></div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px]"></div>
+</div>
+<div class="relative z-10 max-w-7xl mx-auto px-6 md:px-8 w-full">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+<div class="lg:col-span-9 xl:col-span-8">
+<h1 class="font-headline text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-on-surface leading-[1.1] md:leading-[1.15] tracking-tight mb-8">
+                    CENTALUX – <span class="italic font-normal text-primary">Nơi Kết Nối Trí Tuệ &amp; Trái Tim,</span> Khơi Nguồn Thấu Cảm
+                </h1>
+<p class="font-body text-lg md:text-xl lg:text-2xl text-on-surface-variant/85 max-w-2xl mb-12 leading-relaxed">
+                    Khám phá cộng đồng chia sẻ tri thức, chữa lành và lan tỏa sự đồng cảm để cùng nhau phát triển.
+                </p>
+<div class="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-6">
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary-fixed px-8 py-4 rounded-full font-bold text-lg hover:scale-105 active:scale-95 transition-all duration-300 neon-glow-primary">
+                        Tham gia cộng đồng ngay
+                    </button>
+<button class="border border-outline-variant/30 text-primary px-8 py-4 rounded-full font-bold text-lg hover:bg-primary/5 active:scale-95 transition-all duration-300">
+                        Tìm hiểu thêm
+                    </button>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- About Section -->
+<section class="py-24 bg-surface-container-low relative">
+<div class="max-w-7xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-2 gap-20">
+<div class="space-y-8">
+<div class="inline-flex items-center gap-2 text-tertiary-container uppercase tracking-[0.2em] font-bold text-sm">
+<span class="w-8 h-[1px] bg-tertiary-container"></span>
+                    Sứ mệnh của chúng tôi
+                </div>
+<h2 class="font-headline text-4xl md:text-5xl font-bold leading-tight">Xây dựng cộng đồng thấu hiểu và cùng lớn mạnh</h2>
+<p class="font-body text-lg text-on-surface-variant leading-relaxed">
+                    Tại CENTALUX, chúng tôi tin rằng sức mạnh của con người nằm ở khả năng kết nối sâu sắc. Chúng tôi tạo ra một môi trường nơi tri thức không chỉ được truyền tải, mà còn được cảm thụ bằng cả trái tim.
+                </p>
+</div>
+<div class="glass-card p-12 rounded-3xl border-t-[0.5px] border-primary-fixed-dim/20 relative overflow-hidden group">
+<div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-secondary/10 rounded-full blur-[80px] group-hover:bg-secondary/20 transition-all duration-500"></div>
+<div class="relative z-10 space-y-6">
+<div class="inline-flex items-center gap-2 text-secondary-fixed-dim uppercase tracking-[0.2em] font-bold text-sm mb-4">
+<span class="w-8 h-[1px] bg-secondary-fixed-dim"></span>
+                        Tầm nhìn
+                    </div>
+<h3 class="font-headline text-3xl font-bold text-secondary-fixed-dim leading-snug">Không gian an toàn cho những giá trị tích cực</h3>
+<p class="font-body text-lg text-on-surface-variant leading-relaxed">
+                        Trở thành thánh đường kỹ thuật số cho tâm hồn, nơi sự chữa lành diễn ra tự nhiên và mỗi cá nhân đều tìm thấy ánh sáng để lan tỏa những giá trị nhân văn ra xã hội.
+                    </p>
+</div>
+</div>
+</div>
+</section>
+<!-- Core Activities (Bento-style Grid) -->
+<section class="py-24 bg-surface" id="activities">
+<div class="max-w-7xl mx-auto px-8">
+<div class="text-center mb-16 space-y-4">
+<h2 class="font-headline text-4xl md:text-5xl font-bold">Hoạt Động Cốt Lõi</h2>
+<p class="text-on-surface-variant/70 font-body text-lg leading-relaxed">Hành trình trải nghiệm và khám phá bản thân qua từng hoạt động</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Card 1 -->
+<div class="glass-card p-8 rounded-3xl border-t-[0.5px] border-primary-fixed-dim/20 hover:scale-[1.02] transition-transform duration-500 flex flex-col justify-between group">
+<div>
+<div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-8 group-hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary text-3xl">menu_book</span>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-4">Chia sẻ tri thức</h3>
+<p class="text-on-surface-variant/80 font-body leading-relaxed">Những buổi workshop chuyên sâu về tâm lý, tư duy và kỹ năng sống từ các chuyên gia hàng đầu.</p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="glass-card p-8 rounded-3xl border-t-[0.5px] border-secondary-fixed-dim/20 hover:scale-[1.02] transition-transform duration-500 flex flex-col justify-between group">
+<div>
+<div class="w-14 h-14 rounded-2xl bg-secondary/10 flex items-center justify-center mb-8 group-hover:bg-secondary/20 transition-colors">
+<span class="material-symbols-outlined text-secondary text-3xl">auto_awesome</span>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-4">Chữa lành</h3>
+<p class="text-on-surface-variant/80 font-body leading-relaxed">Không gian tĩnh lặng để kết nối lại với chính mình, xoa dịu những tổn thương và tìm thấy sự bình an nội tại.</p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="glass-card p-8 rounded-3xl border-t-[0.5px] border-tertiary-fixed-dim/20 hover:scale-[1.02] transition-transform duration-500 flex flex-col justify-between group">
+<div>
+<div class="w-14 h-14 rounded-2xl bg-tertiary/10 flex items-center justify-center mb-8 group-hover:bg-tertiary/20 transition-colors">
+<span class="material-symbols-outlined text-tertiary text-3xl">favorite</span>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-4">Lan tỏa đồng cảm</h3>
+<p class="text-on-surface-variant/80 font-body leading-relaxed">Kết nối những tâm hồn đồng điệu, tạo nên mạng lưới hỗ trợ tinh thần vững chắc và ấm áp.</p>
+</div>
+</div>
+</div>
+<div class="mt-16 text-center">
+<button class="inline-flex items-center gap-3 text-primary font-bold text-lg group">
+                    Xem lịch hoạt động 
+                    <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Benefits Section -->
+<section class="py-24 bg-surface-container-lowest relative overflow-hidden" id="benefits">
+<div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-primary/5 to-transparent"></div>
+<div class="max-w-7xl mx-auto px-8 relative z-10">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+<div class="relative">
+<div class="absolute -inset-10 bg-primary/20 blur-[100px] rounded-full"></div>
+<img alt="Cộng đồng Centalux" class="rounded-3xl relative z-10 shadow-2xl grayscale hover:grayscale-0 transition-all duration-1000 border border-outline-variant/20" data-alt="People sitting in a modern high-end studio space engaged in empathetic conversation with soft atmospheric lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOIwoYrw4QQVHzhQIltKgU3Y8wItLxXpowfWpZZSJDprkITpeWLsDo8q2NnlaM4HjiisPCn20qgD54ZjnOPZ1xAf7JUAATRKawXwHGpPV-x03oVbYhRVunHM7lP0FhL71crIiJqkOlpHVzwjjV2oeANkPPmDGTEkKVfMhxUKg3cpuk5sj5fxn7NZ30RX0QSZsCd3o0EkZJAgak8I982pzlhTldA76fGeTiO3Na7u8EPL4yPBjZAMBTZ7fCv_9PcXNilpUYvaxScq8K"/>
+</div>
+<div class="space-y-12">
+<h2 class="font-headline text-4xl md:text-5xl font-bold leading-tight">Quyền lợi khi đồng hành cùng Centalux</h2>
+<ul class="space-y-8">
+<li class="flex items-start gap-6 group">
+<div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-1">
+<span class="material-symbols-outlined text-primary text-xl">hearing</span>
+</div>
+<div>
+<h4 class="font-bold text-xl mb-1 group-hover:text-primary transition-colors">Được lắng nghe</h4>
+<p class="text-on-surface-variant/70 font-body leading-relaxed">Một môi trường không phán xét, nơi tiếng nói của bạn luôn được trân trọng.</p>
+</div>
+</li>
+<li class="flex items-start gap-6 group">
+<div class="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center shrink-0 mt-1">
+<span class="material-symbols-outlined text-secondary text-xl">psychology</span>
+</div>
+<div>
+<h4 class="font-bold text-xl mb-1 group-hover:text-secondary transition-colors">Được hỗ trợ</h4>
+<p class="text-on-surface-variant/70 font-body leading-relaxed">Nhận được sự đồng hành từ cộng đồng và các cố vấn tâm hồn giàu kinh nghiệm.</p>
+</div>
+</li>
+<li class="flex items-start gap-6 group">
+<div class="w-10 h-10 rounded-full bg-tertiary/20 flex items-center justify-center shrink-0 mt-1">
+<span class="material-symbols-outlined text-tertiary text-xl">trending_up</span>
+</div>
+<div>
+<h4 class="font-bold text-xl mb-1 group-hover:text-tertiary transition-colors">Phát triển bản thân</h4>
+<p class="text-on-surface-variant/70 font-body leading-relaxed">Khai mở tiềm năng thông qua các khóa học và trải nghiệm thực tế.</p>
+</div>
+</li>
+<li class="flex items-start gap-6 group">
+<div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-1">
+<span class="material-symbols-outlined text-primary text-xl">group_add</span>
+</div>
+<div>
+<h4 class="font-bold text-xl mb-1 group-hover:text-primary transition-colors">Mở rộng quan hệ</h4>
+<p class="text-on-surface-variant/70 font-body leading-relaxed">Kết nối với những người bạn tích cực và những cộng sự tiềm năng.</p>
+</div>
+</li>
+<li class="flex items-start gap-6 group">
+<div class="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center shrink-0 mt-1">
+<span class="material-symbols-outlined text-secondary text-xl">volunteer_activism</span>
+</div>
+<div>
+<h4 class="font-bold text-xl mb-1 group-hover:text-secondary transition-colors">Lan tỏa giá trị</h4>
+<p class="text-on-surface-variant/70 font-body leading-relaxed">Cùng chúng tôi tạo ra những tác động tích cực thực sự cho xã hội.</p>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<!-- Testimonials -->
+<section class="py-24 bg-surface overflow-hidden relative">
+<div class="max-w-7xl mx-auto px-8 relative z-10">
+<h2 class="font-headline text-4xl text-center mb-16 font-bold italic tracking-tight">Cảm nhận từ những người bạn đồng hành</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<div class="glass-card p-10 rounded-3xl relative border border-outline-variant/10">
+<span class="material-symbols-outlined text-6xl text-primary/20 absolute top-8 right-8">format_quote</span>
+<p class="font-body text-xl italic text-on-surface mb-8 leading-relaxed">
+                        "Centalux không chỉ là một cộng đồng, đó là nơi tôi tìm thấy lại chính mình sau những bão giông. Sự thấu cảm ở đây thật sự có sức mạnh chữa lành kỳ diệu."
+                    </p>
+<div class="flex items-center gap-4">
+<img alt="Ms. Lan Avatar" class="w-14 h-14 rounded-full object-cover border-2 border-primary" data-alt="Close up portrait of a calm smiling woman with soft lighting and professional dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4q-h42cOWRwmZb53M2kuozDdPMkxkanzw6Yq7hLeL9jO2g1NXbPxNl5PmQ84pg-4zaJWnPywgh062FKkrM2RdyBlSsjE5BVveBx6OzLQUKmugeQKGtFykjkXaKWlh2q81KeMcojl1eXQ16KO-ZdTBmwDLOlKBcJP_N_QX9k_bK7t_GiplMP_w01PVV5Utk_HzujaeCKdg6IhjC-8pxeMn59dUadrK-yswDKrQgAwm34uwZrVupUaY6nw8oCzp4zSnh3gC0iV0-wAL"/>
+<div>
+<div class="font-bold text-lg">Ms. Lan</div>
+<div class="text-on-surface-variant/60 text-sm">Thành viên từ 2023</div>
+</div>
+</div>
+</div>
+<div class="glass-card p-10 rounded-3xl relative border border-outline-variant/10">
+<span class="material-symbols-outlined text-6xl text-secondary/20 absolute top-8 right-8">format_quote</span>
+<p class="font-body text-xl italic text-on-surface mb-8 leading-relaxed">
+                        "Workshop tri thức tại đây được tổ chức rất chuyên nghiệp và sâu sắc. Tôi đã học được cách lắng nghe không chỉ người khác mà còn là lắng nghe tâm hồn mình."
+                    </p>
+<div class="flex items-center gap-4">
+<img alt="Mr. Tuan Avatar" class="w-14 h-14 rounded-full object-cover border-2 border-secondary" data-alt="Portrait of a friendly looking man in a dark knit sweater with warm moody lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuChrykbspgl29C08BfoCpjXaJ8VIm7qCPBn8luxQXyAswsAhGFYKKToZiy4bspKBJmvxDXSSAJ3CEN0re1HoXoKjMDGyQbZr9Qs3GYavCTLSiyGW8xD07CUItpCVa7EL5SrthZiBQT-Nr1f3mzW_55pAAhkJlhkEmaFFcxN6b04j16PC8bAsjHPbiH8opn2ASnFeB1GiSEKQV_i8zOorgxJGTpz2RZ3EpgfckWbqYNWyV5wJuzGGJevmKK5gDGgpEiQJFM92IfWppxB"/>
+<div>
+<div class="font-bold text-lg">Mr. Tuan</div>
+<div class="text-on-surface-variant/60 text-sm">Thành viên từ 2022</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Founders Section -->
+<section class="py-24 bg-surface-container-low" id="founders">
+<div class="max-w-7xl mx-auto px-8">
+<div class="text-center mb-20 space-y-4">
+<div class="inline-block px-4 py-1 rounded-full bg-primary/10 text-primary font-bold text-xs tracking-widest uppercase">The Visionaries</div>
+<h2 class="font-headline text-4xl md:text-5xl font-bold italic">Những người sáng lập</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-16 max-w-4xl mx-auto">
+<div class="text-center group">
+<div class="relative inline-block mb-8">
+<div class="absolute -inset-4 bg-primary/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<img alt="Founder 1" class="w-56 h-56 rounded-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 border-4 border-surface relative z-10" data-alt="Artistic portrait of a visionary female leader with thoughtful expression and cinematic warm lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAc3BWyc2vt-g3GwjpF_H9WuIet3CkrxSm3htyo9q6bys33q71O1WXOh_HJSeNxhK86yv9uG1hgZk_U7kiU7TuECwSN2kmJIw5uG-CpfgNjmQiAwQFU01CqW_TUoEcfcaOqIyzH5k2ZbEcyOXfIzANRzQL-yYZ5fq4-Cb6vw5HBLAaKr2vPRCsKKEH0bzbdscPSzyKt49_XHKwWW5h0T9-WVZ06XOdvQ_4Vuyh7lcbbDjzIo4iW13nXGlhoAR5-ReY4-mccKOg42xS4"/>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-2">Lâm Anh</h3>
+<p class="text-primary font-semibold mb-4 tracking-wider">FOUNDER &amp; CEO</p>
+<p class="text-on-surface-variant/70 font-body px-8 leading-relaxed">Với hơn 10 năm kinh nghiệm trong giáo dục và tâm lý, cô khát khao tạo ra một không gian thấu cảm thực thụ.</p>
+</div>
+<div class="text-center group">
+<div class="relative inline-block mb-8">
+<div class="absolute -inset-4 bg-secondary/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<img alt="Founder 2" class="w-56 h-56 rounded-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 border-4 border-surface relative z-10" data-alt="Artistic portrait of a calm male spiritual guide with deep empathetic eyes in soft moody shadow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwIp-_oDrEHH33ZKZUDFOM8Q7l-1WVmgPiNQHtf878OZuR5ngBF0RGQM33tWh4mH5ll6RsUUfMe8dgW8qWudbeK4EQl0sq8KE_t6D9jt6Sa4sN6P4dC0Vdy_cxmSn3kWbqtn6R--jijkql1JvemXKgqgqCEBeZSIgx4YWoLC1jEtZtG7p9QS8Sj2udJ9T4Rx3e4Y_-schSIxocCgTyjZsQnPo_dCOjF8IrOquK3Ir7_wDqm__k7V2K6GrNu7oVcaXRchRnZd491tQ6"/>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-2">Minh Triết</h3>
+<p class="text-secondary font-semibold mb-4 tracking-wider">CO-FOUNDER</p>
+<p class="text-on-surface-variant/70 font-body px-8 leading-relaxed">Chuyên gia về thiền định và chữa lành bằng năng lượng, người truyền cảm hứng về lối sống tỉnh thức.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-32 relative overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img alt="Final CTA Background" class="w-full h-full object-cover opacity-20" data-alt="Abstract deep dark background with flowing primary pink and secondary blue neon light trails and soft bokeh" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIexqE_Nr4YAE9MYUownF_e9JrzF_UzfKbgFHgBPOLXOm6-Hgz4I-SszVWImnyX1qxfDjnERyYFQxAtD6ZJ97H54YA_7GPc_QN-aciU9SJxWSz3MgdYHfuZ1KcQh_vPje2b01oYeo8VHGktUmtvO4UhrRQGTNUUFsftrvTgbWkmP3DJ-sBJUFRnW1tUb_XUiQSJD_d7kWxOjyQDXk9FKhzBkTVcfh_zkEMPd-IveSzN3TOzQj0lWicUkUw760f6_gI43VuuoCJL59N"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface/80 to-surface"></div>
+</div>
+<div class="relative z-10 max-w-4xl mx-auto px-8 text-center space-y-12">
+<h2 class="font-headline text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight italic">Bắt Đầu Hành Trình Của Bạn Ngay Hôm Nay!</h2>
+<p class="text-xl text-on-surface-variant leading-relaxed max-w-2xl mx-auto font-body">
+                Gia nhập CENTALUX để cùng chúng tôi kiến tạo một thế giới thấu hiểu và yêu thương hơn. Mỗi bước chân nhỏ bé của bạn đều góp phần lan tỏa ánh sáng.
+            </p>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary-fixed px-12 py-5 rounded-full font-bold text-xl hover:scale-105 active:scale-95 transition-all duration-300 neon-glow-primary shadow-2xl">
+                Tham gia cộng đồng ngay
+            </button>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-[#0e0e0e] dark:bg-[#0e0e0e] w-full py-12 px-8 border-t border-[#534247]/15">
+<div class="flex flex-col md:flex-row justify-between items-center gap-12 max-w-7xl mx-auto">
+<div class="space-y-4 text-center md:text-left">
+<div class="font-serif text-2xl text-[#ffb4cb] font-bold">CENTALUX</div>
+<p class="font-body text-sm tracking-wide text-[#e5e2e1]/50 max-w-xs leading-relaxed">
+                    Kiến tạo cộng đồng thấu hiểu, chữa lành và lan tỏa những giá trị tâm hồn sâu sắc nhất.
+                </p>
+<div class="flex items-center gap-4 justify-center md:justify-start">
+<span class="material-symbols-outlined text-[#ffb4cb]/50 hover:text-[#ffb4cb] cursor-pointer transition-colors">alternate_email</span>
+<span class="material-symbols-outlined text-[#ffb4cb]/50 hover:text-[#ffb4cb] cursor-pointer transition-colors">public</span>
+<span class="material-symbols-outlined text-[#ffb4cb]/50 hover:text-[#ffb4cb] cursor-pointer transition-colors">call</span>
+</div>
+</div>
+<div class="flex flex-wrap justify-center gap-8 md:gap-16">
+<div class="flex flex-col gap-3 text-center md:text-left">
+<span class="font-bold text-on-surface text-sm uppercase tracking-widest mb-2 font-label">Explore</span>
+<a class="text-[#e5e2e1]/50 hover:text-[#93cdfc] transition-colors text-sm font-body" href="#">Privacy Policy</a>
+<a class="text-[#e5e2e1]/50 hover:text-[#93cdfc] transition-colors text-sm font-body" href="#">Terms of Service</a>
+<a class="text-[#e5e2e1]/50 hover:text-[#93cdfc] transition-colors text-sm font-body" href="#">Spiritual Guidance</a>
+</div>
+<div class="flex flex-col gap-3 text-center md:text-left">
+<span class="font-bold text-on-surface text-sm uppercase tracking-widest mb-2 font-label">Connect</span>
+<span class="text-[#e5e2e1]/50 text-sm font-body">Centalux@gmail.com</span>
+<span class="text-[#e5e2e1]/50 text-sm font-body">0839998300</span>
+<span class="text-[#e5e2e1]/50 text-sm font-body">+84 123 456 789</span>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto pt-12 mt-12 border-t border-outline-variant/5 text-center">
+            <p class="font-label text-xs tracking-widest text-[#e5e2e1]/30">
+                © 2024 CENTALUX - THẤU CẢM. The Sacred Digital Sanctuary.
+            </p>
+</div>
+</footer>
+
+<!-- AI Chatbot Components -->
+<div class="chatbot-toggle" id="chatbot-toggle">
+    <span class="material-symbols-outlined text-3xl">chat_bubble</span>
+</div>
+
+<div class="chatbot-window" id="chatbot-window">
+    <div class="chatbot-header">
+        <div class="chatbot-title-container">
+            <div class="online-dot"></div>
+            <span class="chatbot-name">CENTALUX ADMIN</span>
+        </div>
+        <div class="chatbot-actions">
+            <button class="action-btn action-refresh" id="chatbot-refresh" title="Làm mới hội thoại">
+                <span class="material-symbols-outlined">refresh</span>
+            </button>
+            <button class="action-btn" id="chatbot-close" title="Đóng">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+    </div>
+    
+    <div class="chatbot-messages" id="chatbot-messages"></div>
+    
+    <div class="chatbot-input-area">
+        <input type="text" id="chatbot-input" class="chatbot-input" placeholder="Nhập tin nhắn..." autocomplete="off">
+        <button id="chatbot-send" class="chatbot-send" title="Gửi (Enter)">
+            <span class="material-symbols-outlined">send</span>
+        </button>
+    </div>
+</div>
+
+<script type="module" src="chatbot.js"></script>
+
+</body></html>

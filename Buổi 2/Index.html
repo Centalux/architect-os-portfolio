@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <?!= include('CSS'); ?>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <h1>📊 OrderHub</h1>
+      <p>Quản lý đơn hàng</p>
+    </div>
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <button class="nav-link active" onclick="showSection('dashboard')" id="nav-dashboard">
+          <span class="icon">🏠</span>
+          <span>Tổng quan</span>
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" onclick="showSection('customers')" id="nav-customers">
+          <span class="icon">👥</span>
+          <span>Khách hàng</span>
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" onclick="showSection('products')" id="nav-products">
+          <span class="icon">📦</span>
+          <span>Sản phẩm</span>
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" onclick="showSection('orders')" id="nav-orders">
+          <span class="icon">🛒</span>
+          <span>Đơn hàng</span>
+        </button>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- ==================== DASHBOARD ==================== -->
+    <div id="section-dashboard" class="section active">
+      <div class="page-header">
+        <div>
+          <h2>📊 Tổng Quan</h2>
+          <p class="subtitle">Thống kê tổng hợp hệ thống</p>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon purple">👥</div>
+          <div class="stat-info">
+            <h3 id="stat-customers">0</h3>
+            <p>Khách hàng</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue">📦</div>
+          <div class="stat-info">
+            <h3 id="stat-products">0</h3>
+            <p>Sản phẩm</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">🛒</div>
+          <div class="stat-info">
+            <h3 id="stat-orders">0</h3>
+            <p>Đơn hàng</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon pink">💰</div>
+          <div class="stat-info">
+            <h3 id="stat-revenue">0 ₫</h3>
+            <p>Tổng doanh thu</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Orders on Dashboard -->
+      <div class="card">
+        <h3 style="margin-bottom:16px; font-size:16px;">🕐 Đơn hàng gần đây</h3>
+        <div class="table-container" id="dashboard-recent-orders">
+          <div class="empty-state">
+            <div class="icon">📋</div>
+            <p>Đang tải dữ liệu...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== CUSTOMERS ==================== -->
+    <div id="section-customers" class="section">
+      <div class="page-header">
+        <div>
+          <h2>👥 Quản Lý Khách Hàng</h2>
+          <p class="subtitle">Thêm, sửa, xóa và quản lý thông tin khách hàng</p>
+        </div>
+        <button class="btn btn-primary" onclick="openCustomerModal()">
+          ➕ Thêm khách hàng
+        </button>
+      </div>
+      <div class="card">
+        <div class="table-container" id="customers-table-container">
+          <div class="empty-state">
+            <div class="icon">👥</div>
+            <p>Đang tải danh sách khách hàng...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== PRODUCTS ==================== -->
+    <div id="section-products" class="section">
+      <div class="page-header">
+        <div>
+          <h2>📦 Quản Lý Sản Phẩm</h2>
+          <p class="subtitle">Thêm, sửa, xóa và quản lý thông tin sản phẩm</p>
+        </div>
+        <button class="btn btn-primary" onclick="openProductModal()">
+          ➕ Thêm sản phẩm
+        </button>
+      </div>
+      <div class="card">
+        <div class="table-container" id="products-table-container">
+          <div class="empty-state">
+            <div class="icon">📦</div>
+            <p>Đang tải danh sách sản phẩm...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== ORDERS ==================== -->
+    <div id="section-orders" class="section">
+      <div class="page-header">
+        <div>
+          <h2>🛒 Quản Lý Đơn Hàng</h2>
+          <p class="subtitle">Tạo đơn hàng mới và quản lý đơn hàng</p>
+        </div>
+        <button class="btn btn-primary" onclick="openOrderModal()">
+          ➕ Tạo đơn hàng
+        </button>
+      </div>
+      <div class="card">
+        <div class="table-container" id="orders-table-container">
+          <div class="empty-state">
+            <div class="icon">🛒</div>
+            <p>Đang tải danh sách đơn hàng...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ==================== MODALS ==================== -->
+
+<!-- Customer Modal -->
+<div class="modal-overlay" id="customerModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="customerModalTitle">Thêm Khách Hàng</h3>
+      <button class="modal-close" onclick="closeModal('customerModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="customerRowIndex">
+      <div class="form-group">
+        <label>Tên khách hàng *</label>
+        <input type="text" class="form-control" id="customerName" placeholder="Nhập tên khách hàng...">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Số điện thoại *</label>
+          <input type="text" class="form-control" id="customerPhone" placeholder="0912 345 678">
+        </div>
+        <div class="form-group">
+          <label>Hạng thành viên</label>
+          <select class="form-control" id="customerLevel">
+            <option value="Silver">🥈 Silver</option>
+            <option value="Gold">🥇 Gold</option>
+            <option value="Platinum">💎 Platinum</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('customerModal')">Hủy</button>
+      <button class="btn btn-success" onclick="saveCustomer()" id="btnSaveCustomer">💾 Lưu</button>
+    </div>
+  </div>
+</div>
+
+<!-- Product Modal -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="productModalTitle">Thêm Sản Phẩm</h3>
+      <button class="modal-close" onclick="closeModal('productModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="productRowIndex">
+      <div class="form-group">
+        <label>Tên sản phẩm *</label>
+        <input type="text" class="form-control" id="productName" placeholder="Nhập tên sản phẩm...">
+      </div>
+      <div class="form-group">
+        <label>Đơn giá (VNĐ) *</label>
+        <input type="number" class="form-control" id="productPrice" placeholder="0" min="0">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('productModal')">Hủy</button>
+      <button class="btn btn-success" onclick="saveProduct()" id="btnSaveProduct">💾 Lưu</button>
+    </div>
+  </div>
+</div>
+
+<!-- Order Modal -->
+<div class="modal-overlay" id="orderModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>🛒 Tạo Đơn Hàng Mới</h3>
+      <button class="modal-close" onclick="closeModal('orderModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Chọn khách hàng *</label>
+        <select class="form-control" id="orderCustomer">
+          <option value="">-- Chọn khách hàng --</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Chọn sản phẩm *</label>
+        <select class="form-control" id="orderProduct" onchange="calculateTotal()">
+          <option value="">-- Chọn sản phẩm --</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Số lượng *</label>
+        <input type="number" class="form-control" id="orderQuantity" placeholder="1" min="1" value="1" oninput="calculateTotal()">
+      </div>
+      <div class="total-display">
+        <div class="label">Tổng tiền</div>
+        <div class="amount" id="orderTotalDisplay">0 ₫</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('orderModal')">Hủy</button>
+      <button class="btn btn-success" onclick="submitOrder()">🛒 Tạo đơn hàng</button>
+    </div>
+  </div>
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<?!= include('JavaScript'); ?>
+
+</body>
+</html>

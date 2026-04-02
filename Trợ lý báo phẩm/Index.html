@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <?!= include('CSS'); ?>
+</head>
+<body>
+
+<!-- ======== HEADER ======== -->
+<header class="app-header">
+  <div class="header-brand">
+    <div class="logo-icon">🛒</div>
+    <div>
+      <h1>TRỢ LÝ <span>BÁO PHẨM</span></h1>
+      <p>Được tạo bởi Thiên Trường đẹp trai - Đại đội 29 / Phòng HC-KT</p>
+    </div>
+  </div>
+  <nav class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('baogia')" id="tab-baogia">
+      <span class="tab-icon">≡</span> Báo giá
+    </button>
+    <button class="tab-btn" onclick="switchTab('thucdon')" id="tab-thucdon">
+      <span class="tab-icon">📋</span> Thực đơn
+    </button>
+    <button class="tab-btn" onclick="switchTab('bangketuan')" id="tab-bangketuan">
+      <span class="tab-icon">📅</span> Bảng Kê Tuần
+    </button>
+  </nav>
+</header>
+
+<!-- ======== MAIN CONTENT ======== -->
+<div class="main-content">
+
+  <!-- ==================== TAB 1: BÁO GIÁ ==================== -->
+  <div id="section-baogia" class="section active">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <div class="icon-box green">💲</div>
+          <div>
+            <h3>Danh Mục Báo Giá</h3>
+            <p>Quản lý nguyên liệu, giá thị trường & giá tăng gia (<span id="baogia-count">0</span>/1000)</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="triggerExcelImport()">📤 Nhập từ Excel</button>
+          <small style="color:var(--text-muted);">Cột: [Tên thực phẩm] | [ĐVT] | [Giá TT] | [Giá TG]</small>
+        </div>
+      </div>
+
+      <!-- Input Row -->
+      <div class="input-row">
+        <div class="input-group">
+          <label>Tên thực phẩm</label>
+          <input class="form-input" id="bg-ten" placeholder="VD: Thịt lợn...">
+        </div>
+        <div class="input-group">
+          <label>ĐVT</label>
+          <input class="form-input" id="bg-dvt" placeholder="kg" value="kg">
+        </div>
+        <div class="input-group">
+          <label>Giá thị trường</label>
+          <input class="form-input" id="bg-giaTT" placeholder="VD: 150000" type="number">
+        </div>
+        <div class="input-group">
+          <label class="highlight">Giá tăng gia</label>
+          <input class="form-input" id="bg-giaTG" placeholder="VD: 120000" type="number">
+        </div>
+        <button class="btn-add-circle" onclick="addBaoGiaItem()" title="Thêm">+</button>
+      </div>
+
+      <!-- Search + Delete All -->
+      <div class="actions-row">
+        <div class="search-box">
+          <span>🔍</span>
+          <input id="bg-search" placeholder="Tra cứu thực phẩm trong danh sách.." oninput="filterBaoGia()">
+        </div>
+        <button class="delete-all-btn" onclick="showDeleteAllModal()">🗑️ Xóa toàn bộ danh mục</button>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap">
+        <table id="baogia-table">
+          <thead>
+            <tr>
+              <th style="width:50px">STT</th>
+              <th>Tên thực phẩm</th>
+              <th>ĐVT</th>
+              <th class="right">Giá thị trường</th>
+              <th class="right">Giá tăng gia</th>
+              <th class="center" style="width:90px">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="baogia-tbody">
+            <tr><td colspan="6" class="empty-state"><p>Chưa có dữ liệu báo giá</p></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Hidden file input for Excel import -->
+    <input type="file" id="excel-file-input" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleExcelImport(event)">
+  </div>
+
+  <!-- ==================== TAB 2: THỰC ĐƠN ==================== -->
+  <div id="section-thucdon" class="section">
+
+    <!-- Week pills -->
+    <div class="pill-row" id="week-pills"></div>
+    <!-- Day pills -->
+    <div class="pill-row" id="day-pills"></div>
+
+    <!-- Meal sections rendered by JS -->
+    <div id="meals-container"></div>
+
+    <!-- Daily Report -->
+    <div class="daily-report" id="daily-report">
+      <div class="daily-report-header">
+        <div>
+          <small>DAILY LOGISTICS</small>
+          <h3>Bảng Kê Trong Ngày - <span id="daily-report-day">Thứ Hai</span></h3>
+        </div>
+        <button class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,0.3);" onclick="printDailyReport()">🖨️</button>
+      </div>
+      <div class="daily-report-body">
+        <div class="summary-cards" id="daily-summary-cards"></div>
+        <!-- Nhà thầu section -->
+        <div class="report-section-title"><div class="dot"></div> I. BẢO ĐÀM NHÀ THẦU</div>
+        <table class="report-table" id="daily-nhathau-table">
+          <thead>
+            <tr>
+              <th>STT</th><th>Tên Thực Phẩm</th><th>ĐVT</th><th>Đơn Giá</th>
+              <th colspan="4" class="center" style="border-bottom:none">Số lượng thực tế</th>
+              <th class="right">Thành Tiền</th>
+            </tr>
+            <tr>
+              <th></th><th></th><th></th><th></th>
+              <th class="highlight center">TỔNG</th><th class="center">Sáng</th><th class="center">Trưa</th><th class="center">Chiều</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="daily-nhathau-tbody">
+            <tr class="empty-row"><td colspan="9">Không có dữ liệu</td></tr>
+          </tbody>
+        </table>
+
+        <!-- Tăng gia section -->
+        <div class="report-section-title blue"><div class="dot"></div> II. TỰ KHAI THÁC, TĂNG GIA</div>
+        <table class="report-table" id="daily-tanggia-table">
+          <thead>
+            <tr>
+              <th>STT</th><th>Tên Thực Phẩm</th><th>ĐVT</th><th>Đơn Giá</th>
+              <th colspan="4" class="center" style="border-bottom:none">Số lượng thực tế</th>
+              <th class="right">Thành Tiền</th>
+            </tr>
+            <tr>
+              <th></th><th></th><th></th><th></th>
+              <th class="highlight center">TỔNG</th><th class="center">Sáng</th><th class="center">Trưa</th><th class="center">Chiều</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="daily-tanggia-tbody">
+            <tr class="empty-row"><td colspan="9">Không có dữ liệu</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TAB 3: BẢNG KÊ TUẦN ==================== -->
+  <div id="section-bangketuan" class="section">
+    <!-- Week pills for weekly report -->
+    <div class="pill-row" id="weekly-week-pills"></div>
+
+    <div class="daily-report">
+      <div class="daily-report-header">
+        <div>
+          <small>WEEKLY LOGISTICS</small>
+          <h3>Bảng Kê Tuần - <span id="weekly-title">Tuần 1</span></h3>
+        </div>
+      </div>
+      <div class="daily-report-body">
+        <div class="weekly-summary-cards" id="weekly-summary-cards"></div>
+
+        <!-- Nhà thầu -->
+        <div class="report-section-title"><div class="dot"></div> I. BẢO ĐÀM NHÀ THẦU</div>
+        <div class="table-wrap">
+          <table class="weekly-report-table" id="weekly-nhathau-table">
+            <thead>
+              <tr>
+                <th>STT</th><th>Tên Thực Phẩm</th><th>ĐVT</th><th>Đơn Giá</th>
+                <th colspan="8" class="center">Số lượng thực tế</th>
+                <th class="right">Thành Tiền</th>
+              </tr>
+              <tr>
+                <th></th><th></th><th></th><th></th>
+                <th class="highlight center">TỔNG</th>
+                <th class="center">THai</th><th class="center">TBa</th><th class="center">TTư</th>
+                <th class="center">TNăm</th><th class="center">TSáu</th><th class="center">TBảy</th><th class="center">CN</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="weekly-nhathau-tbody">
+              <tr class="empty-row"><td colspan="13">Không có dữ liệu</td></tr>
+            </tbody>
+            <tfoot id="weekly-nhathau-tfoot">
+              <tr><td colspan="12">Cộng khoản Nhà Thầu:</td><td class="right price-cell">0</td></tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <!-- Tăng gia -->
+        <div class="report-section-title blue"><div class="dot"></div> II. TỰ KHAI THÁC, TĂNG GIA</div>
+        <div class="table-wrap">
+          <table class="weekly-report-table" id="weekly-tanggia-table">
+            <thead>
+              <tr>
+                <th>STT</th><th>Tên Thực Phẩm</th><th>ĐVT</th><th>Đơn Giá</th>
+                <th colspan="8" class="center">Số lượng thực tế</th>
+                <th class="right">Thành Tiền</th>
+              </tr>
+              <tr>
+                <th></th><th></th><th></th><th></th>
+                <th class="highlight center">TỔNG</th>
+                <th class="center">THai</th><th class="center">TBa</th><th class="center">TTư</th>
+                <th class="center">TNăm</th><th class="center">TSáu</th><th class="center">TBảy</th><th class="center">CN</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="weekly-tanggia-tbody">
+              <tr class="empty-row"><td colspan="13">Không có dữ liệu</td></tr>
+            </tbody>
+            <tfoot id="weekly-tanggia-tfoot">
+              <tr><td colspan="12">Cộng khoản Tăng Gia:</td><td class="right price-cell">0</td></tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <!-- Actions -->
+        <div class="report-actions">
+          <button class="btn btn-outline" onclick="printWeeklyReport()">🖨️ IN BẢNG KÊ</button>
+          <button class="btn btn-primary" onclick="exportWeeklyExcel()">📥 XUẤT FILE EXCEL</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ======== DELETE ALL MODAL ======== -->
+<div class="modal-overlay" id="deleteAllModal">
+  <div class="modal">
+    <div class="modal-icon">⚠️</div>
+    <h3>Xác nhận xóa toàn bộ</h3>
+    <p>Bạn có chắc muốn xóa toàn bộ danh mục báo giá? Hành động này không thể hoàn tác.</p>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('deleteAllModal')">Hủy bỏ</button>
+      <button class="btn btn-danger" onclick="confirmDeleteAll()">Xóa tất cả</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======== LOADING ======== -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+</div>
+
+<!-- ======== TOAST ======== -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ======== EXTERNAL LIBS ======== -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
+
+<?!= include('JavaScript'); ?>
+
+</body>
+</html>

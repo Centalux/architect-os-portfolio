@@ -1,0 +1,813 @@
+<script>
+// ============================================
+// JAVASCRIPT.HTML - Client-side Logic
+// Trợ Lý Báo Phẩm
+// ============================================
+
+// ============ CONSTANTS ============
+var WEEKS = [1,2,3,4,5];
+var DAYS = ['Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy','Chủ Nhật'];
+var DAY_SHORT = ['THai','TBa','TTư','TNăm','TSáu','TBảy','CN'];
+var MEALS = ['sang','trua','chieu'];
+var MEAL_LABELS = {sang:'Buổi Sáng', trua:'Buổi Trưa', chieu:'Buổi Chiều'};
+var MEAL_ICONS = {sang:'☀️', trua:'🌤️', chieu:'🌙'};
+var MEAL_CLASSES = {sang:'morning', trua:'noon', chieu:'evening'};
+
+// ============ DEEP STATE ============
+var STATE = {
+  baoGia: [],        // [{ten, dvt, giaTT, giaTG}, ...]
+  menu: {},          // {week: {day: {meal: {tieuchuan:0, dishes:[{name, ingredients:[{ten, nguonCung, dinhLuong}]}]}}}}
+  quanSo: {},        // {week: {day: {sang, trua, chieu}}}
+  currentWeek: 1,
+  currentDay: 0,     // index in DAYS
+  currentTab: 'baogia',
+  weeklyReportWeek: 1
+};
+
+// ============ INIT ============
+document.addEventListener('DOMContentLoaded', function() {
+  showLoading();
+  initMenuState();
+  renderWeekPills();
+  renderDayPills();
+  renderWeeklyWeekPills();
+
+  // Load data from server
+  google.script.run
+    .withSuccessHandler(function(data) {
+      hideLoading();
+      if (data.error) showToast('Cảnh báo: ' + data.error, 'info');
+      // Quân số
+      STATE.quanSo = data.quanSo || {};
+      // Báo giá
+      if (data.baoGia && data.baoGia.length > 0) {
+        STATE.baoGia = data.baoGia;
+      }
+      // Menu
+      if (data.menuJson) {
+        try {
+          var loaded = JSON.parse(data.menuJson);
+          // Merge loaded into STATE.menu preserving structure
+          for (var w in loaded) {
+            if (!STATE.menu[w]) STATE.menu[w] = {};
+            for (var d in loaded[w]) {
+              if (!STATE.menu[w][d]) STATE.menu[w][d] = {};
+              for (var m in loaded[w][d]) {
+                STATE.menu[w][d][m] = loaded[w][d][m];
+              }
+            }
+          }
+        } catch(e) { console.log('Lỗi parse menu:', e); }
+      }
+      renderBaoGiaTable();
+      renderMeals();
+      renderDailyReport();
+      renderWeeklyReport();
+    })
+    .withFailureHandler(function(err) {
+      hideLoading();
+      showToast('Lỗi tải dữ liệu: ' + err.message, 'error');
+      renderBaoGiaTable();
+      renderMeals();
+    })
+    .getInitData();
+});
+
+function initMenuState() {
+  WEEKS.forEach(function(w) {
+    STATE.menu[w] = STATE.menu[w] || {};
+    DAYS.forEach(function(d) {
+      STATE.menu[w][d] = STATE.menu[w][d] || {};
+      MEALS.forEach(function(m) {
+        STATE.menu[w][d][m] = STATE.menu[w][d][m] || {tieuchuan: 0, dishes: []};
+      });
+    });
+  });
+}
+
+// ============ TAB NAVIGATION ============
+function switchTab(tab) {
+  STATE.currentTab = tab;
+  document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('section-' + tab).classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+
+  if (tab === 'thucdon') { renderMeals(); renderDailyReport(); }
+  if (tab === 'bangketuan') { renderWeeklyReport(); }
+}
+
+// ============ UTILITY ============
+function showLoading() { document.getElementById('loadingOverlay').classList.add('show'); }
+function hideLoading() { document.getElementById('loadingOverlay').classList.remove('show'); }
+
+function showToast(msg, type) {
+  type = type || 'info';
+  var c = document.getElementById('toastContainer');
+  var t = document.createElement('div');
+  var icons = {success:'✅', error:'❌', info:'ℹ️'};
+  t.className = 'toast toast-' + type;
+  t.innerHTML = '<span>' + (icons[type]||'') + '</span><span>' + msg + '</span>';
+  c.appendChild(t);
+  setTimeout(function() { if (t.parentNode) t.parentNode.removeChild(t); }, 4000);
+}
+
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+function fmtNum(n) {
+  if (n === null || n === undefined || isNaN(n)) return '0';
+  return new Intl.NumberFormat('vi-VN').format(Math.round(n));
+}
+
+function fmtMoney(n) { return fmtNum(n); }
+
+function escapeHtml(s) {
+  if (!s) return '';
+  return s.toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function getQuanSo(week, day, meal) {
+  var qs = STATE.quanSo;
+  if (!qs[week]) return 0;
+  if (!qs[week][day]) return 0;
+  return qs[week][day][meal] || 0;
+}
+
+// ============ BÁO GIÁ MODULE ============
+
+function addBaoGiaItem() {
+  var ten = document.getElementById('bg-ten').value.trim();
+  var dvt = document.getElementById('bg-dvt').value.trim() || 'kg';
+  var giaTT = parseFloat(document.getElementById('bg-giaTT').value) || 0;
+  var giaTG = parseFloat(document.getElementById('bg-giaTG').value) || 0;
+  if (!ten) { showToast('Vui lòng nhập tên thực phẩm!', 'error'); return; }
+  STATE.baoGia.push({ten:ten, dvt:dvt, giaTT:giaTT, giaTG:giaTG});
+  document.getElementById('bg-ten').value = '';
+  document.getElementById('bg-giaTT').value = '';
+  document.getElementById('bg-giaTG').value = '';
+  renderBaoGiaTable();
+  showToast('Đã thêm: ' + ten, 'success');
+  autoSaveBaoGia();
+}
+
+function renderBaoGiaTable() {
+  var search = (document.getElementById('bg-search')? document.getElementById('bg-search').value : '').toLowerCase();
+  var tbody = document.getElementById('baogia-tbody');
+  var items = STATE.baoGia;
+  document.getElementById('baogia-count').textContent = items.length;
+
+  if (items.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><p>Chưa có dữ liệu báo giá</p></td></tr>';
+    return;
+  }
+
+  var html = '';
+  var count = 0;
+  items.forEach(function(item, idx) {
+    if (search && item.ten.toLowerCase().indexOf(search) === -1) return;
+    count++;
+    html += '<tr id="bg-row-' + idx + '">';
+    html += '<td>' + count + '</td>';
+    html += '<td>' + escapeHtml(item.ten) + ' <span class="badge-lock">Khóa</span></td>';
+    html += '<td>' + escapeHtml(item.dvt) + '</td>';
+    html += '<td class="right price-cell">' + fmtNum(item.giaTT) + '</td>';
+    html += '<td class="right price-cell">' + fmtNum(item.giaTG) + '</td>';
+    html += '<td class="center">';
+    html += '<button class="btn-icon" onclick="startEditBaoGia(' + idx + ')" title="Chỉnh sửa">✏️</button> ';
+    html += '<button class="btn-icon danger" onclick="deleteBaoGiaItem(' + idx + ')" title="Xóa">🗑️</button>';
+    html += '</td></tr>';
+  });
+  if (count === 0) html = '<tr><td colspan="6" class="empty-state"><p>Không tìm thấy kết quả</p></td></tr>';
+  tbody.innerHTML = html;
+}
+
+function filterBaoGia() { renderBaoGiaTable(); }
+
+function startEditBaoGia(idx) {
+  var item = STATE.baoGia[idx];
+  if (!item) return;
+  var row = document.getElementById('bg-row-' + idx);
+  if (!row) return;
+  row.innerHTML = '<td>' + (idx+1) + '</td>' +
+    '<td><input class="edit-input" id="edit-ten-' + idx + '" value="' + escapeHtml(item.ten) + '"></td>' +
+    '<td><input class="edit-input" id="edit-dvt-' + idx + '" value="' + escapeHtml(item.dvt) + '" style="width:60px"></td>' +
+    '<td><input class="edit-input" id="edit-giaTT-' + idx + '" type="number" value="' + item.giaTT + '" style="width:100px;text-align:right"></td>' +
+    '<td><input class="edit-input" id="edit-giaTG-' + idx + '" type="number" value="' + item.giaTG + '" style="width:100px;text-align:right"></td>' +
+    '<td class="center">' +
+    '<button class="btn-icon" style="color:#43A047;border-color:#43A047" onclick="saveEditBaoGia(' + idx + ')" title="Lưu">✓</button> ' +
+    '<button class="btn-icon" onclick="renderBaoGiaTable()" title="Hủy">✕</button></td>';
+}
+
+function saveEditBaoGia(idx) {
+  STATE.baoGia[idx].ten = document.getElementById('edit-ten-' + idx).value.trim() || STATE.baoGia[idx].ten;
+  STATE.baoGia[idx].dvt = document.getElementById('edit-dvt-' + idx).value.trim() || STATE.baoGia[idx].dvt;
+  STATE.baoGia[idx].giaTT = parseFloat(document.getElementById('edit-giaTT-' + idx).value) || 0;
+  STATE.baoGia[idx].giaTG = parseFloat(document.getElementById('edit-giaTG-' + idx).value) || 0;
+  renderBaoGiaTable();
+  showToast('Đã cập nhật!', 'success');
+  autoSaveBaoGia();
+}
+
+function deleteBaoGiaItem(idx) {
+  var name = STATE.baoGia[idx] ? STATE.baoGia[idx].ten : '';
+  STATE.baoGia.splice(idx, 1);
+  renderBaoGiaTable();
+  showToast('Đã xóa: ' + name, 'info');
+  autoSaveBaoGia();
+}
+
+function showDeleteAllModal() { openModal('deleteAllModal'); }
+function confirmDeleteAll() {
+  STATE.baoGia = [];
+  closeModal('deleteAllModal');
+  renderBaoGiaTable();
+  showToast('Đã xóa toàn bộ danh mục!', 'info');
+  autoSaveBaoGia();
+}
+
+function autoSaveBaoGia() {
+  google.script.run.withFailureHandler(function(e) {
+    console.log('AutoSave BaoGia error:', e);
+  }).saveBaoGia(STATE.baoGia);
+}
+
+// ---- EXCEL IMPORT ----
+function triggerExcelImport() {
+  document.getElementById('excel-file-input').click();
+}
+
+function handleExcelImport(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      var data = new Uint8Array(ev.target.result);
+      var workbook = XLSX.read(data, {type:'array'});
+      var sheet = workbook.Sheets[workbook.SheetNames[0]];
+      var rows = XLSX.utils.sheet_to_json(sheet, {header:1});
+      var imported = 0;
+      for (var i = 1; i < rows.length; i++) {
+        var r = rows[i];
+        if (!r || !r[0]) continue;
+        var ten = r[0].toString().trim();
+        if (!ten) continue;
+        STATE.baoGia.push({
+          ten: ten,
+          dvt: (r[1] || 'kg').toString().trim(),
+          giaTT: parseFloat(r[2]) || 0,
+          giaTG: parseFloat(r[3]) || 0
+        });
+        imported++;
+      }
+      renderBaoGiaTable();
+      showToast('Đã nhập ' + imported + ' nguyên liệu từ Excel!', 'success');
+      autoSaveBaoGia();
+    } catch(err) {
+      showToast('Lỗi đọc file Excel: ' + err.message, 'error');
+    }
+  };
+  reader.readAsArrayBuffer(file);
+  e.target.value = '';
+}
+
+// ============ WEEK / DAY PILLS ============
+
+function renderWeekPills() {
+  var html = '';
+  WEEKS.forEach(function(w) {
+    html += '<button class="pill' + (w === STATE.currentWeek ? ' active' : '') + '" onclick="selectWeek(' + w + ')">Tuần ' + w + '</button>';
+  });
+  document.getElementById('week-pills').innerHTML = html;
+}
+
+function renderDayPills() {
+  var html = '';
+  DAYS.forEach(function(d, i) {
+    html += '<button class="pill' + (i === STATE.currentDay ? ' active' : '') + '" onclick="selectDay(' + i + ')">' + d + '</button>';
+  });
+  document.getElementById('day-pills').innerHTML = html;
+}
+
+function selectWeek(w) {
+  STATE.currentWeek = w;
+  renderWeekPills();
+  renderMeals();
+  renderDailyReport();
+}
+
+function selectDay(d) {
+  STATE.currentDay = d;
+  renderDayPills();
+  renderMeals();
+  renderDailyReport();
+}
+
+function renderWeeklyWeekPills() {
+  var html = '';
+  WEEKS.forEach(function(w) {
+    html += '<button class="pill' + (w === STATE.weeklyReportWeek ? ' active' : '') + '" onclick="selectWeeklyWeek(' + w + ')">Tuần ' + w + '</button>';
+  });
+  document.getElementById('weekly-week-pills').innerHTML = html;
+}
+
+function selectWeeklyWeek(w) {
+  STATE.weeklyReportWeek = w;
+  renderWeeklyWeekPills();
+  renderWeeklyReport();
+}
+
+// ============ THỰC ĐƠN MODULE ============
+
+function getCurrentMealData(meal) {
+  var w = STATE.currentWeek;
+  var d = DAYS[STATE.currentDay];
+  if (!STATE.menu[w]) STATE.menu[w] = {};
+  if (!STATE.menu[w][d]) STATE.menu[w][d] = {};
+  if (!STATE.menu[w][d][meal]) STATE.menu[w][d][meal] = {tieuchuan:0, dishes:[]};
+  return STATE.menu[w][d][meal];
+}
+
+function lookupPrice(ten, nguonCung) {
+  for (var i = 0; i < STATE.baoGia.length; i++) {
+    var bg = STATE.baoGia[i];
+    if (bg.ten === ten) {
+      if (nguonCung === 'Nhà thầu') return {gia: bg.giaTT, dvt: bg.dvt};
+      if (nguonCung === 'Tăng gia') return {gia: bg.giaTG, dvt: bg.dvt};
+      return {gia: bg.giaTT, dvt: bg.dvt};
+    }
+  }
+  return {gia: 0, dvt: ''};
+}
+
+function lookupDvt(ten) {
+  for (var i = 0; i < STATE.baoGia.length; i++) {
+    if (STATE.baoGia[i].ten === ten) return STATE.baoGia[i].dvt;
+  }
+  return '';
+}
+
+function renderMeals() {
+  var container = document.getElementById('meals-container');
+  var html = '';
+  var w = STATE.currentWeek;
+  var d = DAYS[STATE.currentDay];
+  var dayLabel = d;
+  document.getElementById('daily-report-day').textContent = dayLabel;
+
+  MEALS.forEach(function(meal) {
+    var mealData = getCurrentMealData(meal);
+    var soNguoi = getQuanSo(w, d, meal);
+    html += '<div class="meal-section ' + MEAL_CLASSES[meal] + '">';
+    // Header
+    html += '<div class="meal-header">';
+    html += '<div class="meal-label">' + MEAL_ICONS[meal] + ' ' + MEAL_LABELS[meal] + '</div>';
+    html += '<div class="meal-stats">';
+    html += '<div class="stat-box"><span>SỐ NGƯỜI:</span><input type="number" value="' + soNguoi + '" readonly style="color:var(--text-muted);"></div>';
+    html += '<div class="stat-box"><span>TIÊU CHUẨN:</span><input type="number" value="' + (mealData.tieuchuan||0) + '" onchange="updateTieuChuan(\'' + meal + '\', this.value)"></div>';
+    html += '</div></div>';
+    // Body
+    html += '<div class="meal-body">';
+    // Dishes
+    mealData.dishes.forEach(function(dish, dIdx) {
+      html += renderDishCard(meal, dIdx, dish, soNguoi);
+    });
+    // Add dish button
+    html += '<button class="add-dish-btn" onclick="addDish(\'' + meal + '\')">+ Thêm món thực tế</button>';
+    html += '</div></div>';
+  });
+
+  container.innerHTML = html;
+}
+
+function renderDishCard(meal, dIdx, dish, soNguoi) {
+  var h = '<div class="dish-card">';
+  h += '<div class="dish-title-row">';
+  h += '<label>MÓN ' + (dIdx+1) + '</label> <label>TÊN MÓN ĂN</label>';
+  h += '<input value="' + escapeHtml(dish.name || '') + '" placeholder="VD: Thịt lợn kho tàu" onchange="updateDishName(\'' + meal + '\',' + dIdx + ',this.value)">';
+  h += '<button class="btn-remove-dish" onclick="removeDish(\'' + meal + '\',' + dIdx + ')" title="Xóa món">✕</button>';
+  h += '</div>';
+  // Ingredients table
+  h += '<table class="ingredient-table"><thead><tr>';
+  h += '<th style="width:25%">Nguyên liệu</th>';
+  h += '<th style="width:14%">Nguồn cung</th>';
+  h += '<th style="width:16%">Đơn giá</th>';
+  h += '<th style="width:22%">Định lượng/1 người</th>';
+  h += '<th style="width:14%" data-tooltip="= Định lượng × Số người × Đơn giá">Tổng tiền</th>';
+  h += '<th style="width:30px"></th>';
+  h += '</tr></thead><tbody>';
+
+  dish.ingredients.forEach(function(ing, iIdx) {
+    var priceInfo = lookupPrice(ing.ten, ing.nguonCung);
+    var dvt = lookupDvt(ing.ten) || ing.dvt || '';
+    var gia = priceInfo.gia;
+    var dl = parseFloat(ing.dinhLuong) || 0;
+
+    // Calculate quantity in proper unit for cost
+    var qtyForCalc = dl; // quantity per person in the unit
+    if (dvt.toLowerCase() === 'kg') {
+      qtyForCalc = dl / 1000; // input is grams, convert to kg
+    }
+    var tongTien = gia * qtyForCalc * soNguoi;
+
+    h += '<tr>';
+    // Nguyên liệu dropdown/autocomplete
+    h += '<td><select onchange="updateIngredient(\'' + meal + '\',' + dIdx + ',' + iIdx + ',\'ten\',this.value);renderMeals()">';
+    h += '<option value="">-- Chọn --</option>';
+    STATE.baoGia.forEach(function(bg) {
+      h += '<option value="' + escapeHtml(bg.ten) + '"' + (bg.ten === ing.ten ? ' selected' : '') + '>' + escapeHtml(bg.ten) + '</option>';
+    });
+    h += '</select></td>';
+    // Nguồn cung
+    h += '<td><select onchange="updateIngredient(\'' + meal + '\',' + dIdx + ',' + iIdx + ',\'nguonCung\',this.value);renderMeals()">';
+    h += '<option value="Nhà thầu"' + (ing.nguonCung==='Nhà thầu'?' selected':'') + '>Nhà thầu</option>';
+    h += '<option value="Tăng gia"' + (ing.nguonCung==='Tăng gia'?' selected':'') + '>Tăng gia</option>';
+    h += '</select></td>';
+    // Đơn giá
+    h += '<td style="font-size:12px;color:var(--primary);font-weight:600;">' + fmtNum(gia) + (dvt ? ' / ' + dvt : '') + '</td>';
+    // Định lượng
+    if (dvt.toLowerCase() === 'kg') {
+      var kgVal = (dl / 1000).toFixed(3);
+      h += '<td><div class="qty-dual">';
+      h += '<input class="qty-gram" type="number" placeholder="g" value="' + (dl||'') + '" onchange="updateIngredient(\'' + meal + '\',' + dIdx + ',' + iIdx + ',\'dinhLuong\',this.value);renderMeals()">';
+      h += '<input class="qty-kg" type="text" value="' + kgVal + ' kg" readonly>';
+      h += '</div></td>';
+    } else {
+      h += '<td><input type="number" value="' + (dl||'') + '" placeholder="Số lượng" style="width:100%;padding:5px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;" onchange="updateIngredient(\'' + meal + '\',' + dIdx + ',' + iIdx + ',\'dinhLuong\',this.value);renderMeals()"></td>';
+    }
+    // Tổng tiền
+    h += '<td style="font-weight:600;color:var(--text-primary);text-align:right;">' + fmtMoney(tongTien) + '</td>';
+    // Remove
+    h += '<td><button class="btn-icon danger" style="width:24px;height:24px;font-size:11px;" onclick="removeIngredient(\'' + meal + '\',' + dIdx + ',' + iIdx + ')">✕</button></td>';
+    h += '</tr>';
+  });
+
+  h += '</tbody></table>';
+  h += '<button class="add-ingredient-btn" onclick="addIngredient(\'' + meal + '\',' + dIdx + ')">+ THÊM NGUYÊN LIỆU</button>';
+  h += '</div>';
+  return h;
+}
+
+// ---- Menu CRUD ----
+function updateTieuChuan(meal, val) {
+  getCurrentMealData(meal).tieuchuan = parseFloat(val) || 0;
+  autoSaveMenu();
+}
+
+function addDish(meal) {
+  getCurrentMealData(meal).dishes.push({name:'', ingredients:[]});
+  renderMeals();
+  autoSaveMenu();
+}
+
+function removeDish(meal, dIdx) {
+  getCurrentMealData(meal).dishes.splice(dIdx, 1);
+  renderMeals();
+  renderDailyReport();
+  autoSaveMenu();
+}
+
+function updateDishName(meal, dIdx, val) {
+  getCurrentMealData(meal).dishes[dIdx].name = val;
+  autoSaveMenu();
+}
+
+function addIngredient(meal, dIdx) {
+  getCurrentMealData(meal).dishes[dIdx].ingredients.push({ten:'', nguonCung:'Nhà thầu', dinhLuong:0});
+  renderMeals();
+  autoSaveMenu();
+}
+
+function removeIngredient(meal, dIdx, iIdx) {
+  getCurrentMealData(meal).dishes[dIdx].ingredients.splice(iIdx, 1);
+  renderMeals();
+  renderDailyReport();
+  autoSaveMenu();
+}
+
+function updateIngredient(meal, dIdx, iIdx, field, val) {
+  var ing = getCurrentMealData(meal).dishes[dIdx].ingredients[iIdx];
+  if (field === 'dinhLuong') {
+    ing[field] = parseFloat(val) || 0;
+  } else {
+    ing[field] = val;
+  }
+  renderDailyReport();
+  autoSaveMenu();
+}
+
+var _saveMenuTimer = null;
+function autoSaveMenu() {
+  clearTimeout(_saveMenuTimer);
+  _saveMenuTimer = setTimeout(function() {
+    var json = JSON.stringify(STATE.menu);
+    google.script.run.withFailureHandler(function(e) {
+      console.log('AutoSave menu error:', e);
+    }).saveMenuData(json);
+  }, 2000);
+}
+
+// ============ AGGREGATE ENGINE ============
+
+/**
+ * Tổng hợp nguyên liệu cho 1 ngày (cả 3 buổi)
+ * Trả về: {nhathau: [{ten, dvt, gia, sang, trua, chieu, tong, thanhTien}], tanggia: [...]}
+ */
+function aggregateDay(week, day) {
+  var map = {nhathau:{}, tanggia:{}};
+
+  MEALS.forEach(function(meal) {
+    var soNguoi = getQuanSo(week, day, meal);
+    var mealData = STATE.menu[week] && STATE.menu[week][day] && STATE.menu[week][day][meal];
+    if (!mealData) return;
+
+    mealData.dishes.forEach(function(dish) {
+      dish.ingredients.forEach(function(ing) {
+        if (!ing.ten) return;
+        var priceInfo = lookupPrice(ing.ten, ing.nguonCung);
+        var dvt = lookupDvt(ing.ten) || '';
+        var dl = parseFloat(ing.dinhLuong) || 0;
+        var qtyPerPerson = dl;
+        if (dvt.toLowerCase() === 'kg') qtyPerPerson = dl / 1000;
+        var totalQty = qtyPerPerson * soNguoi;
+        var thanhTien = priceInfo.gia * totalQty;
+
+        var bucket = ing.nguonCung === 'Tăng gia' ? 'tanggia' : 'nhathau';
+        var key = ing.ten + '|' + dvt;
+
+        if (!map[bucket][key]) {
+          map[bucket][key] = {ten: ing.ten, dvt: dvt, gia: priceInfo.gia, sang:0, trua:0, chieu:0, tong:0, thanhTien:0};
+        }
+        map[bucket][key][meal] += totalQty;
+        map[bucket][key].tong += totalQty;
+        map[bucket][key].thanhTien += thanhTien;
+      });
+    });
+  });
+
+  var result = {nhathau:[], tanggia:[]};
+  for (var k in map.nhathau) result.nhathau.push(map.nhathau[k]);
+  for (var k2 in map.tanggia) result.tanggia.push(map.tanggia[k2]);
+  return result;
+}
+
+/**
+ * Tổng hợp nguyên liệu cho 1 tuần (7 ngày)
+ * Trả về: {nhathau: [{ten, dvt, gia, days:[7 values], tong, thanhTien}], tanggia: [...]}
+ */
+function aggregateWeek(week) {
+  var map = {nhathau:{}, tanggia:{}};
+
+  DAYS.forEach(function(day, dayIdx) {
+    MEALS.forEach(function(meal) {
+      var soNguoi = getQuanSo(week, day, meal);
+      var mealData = STATE.menu[week] && STATE.menu[week][day] && STATE.menu[week][day][meal];
+      if (!mealData) return;
+
+      mealData.dishes.forEach(function(dish) {
+        dish.ingredients.forEach(function(ing) {
+          if (!ing.ten) return;
+          var priceInfo = lookupPrice(ing.ten, ing.nguonCung);
+          var dvt = lookupDvt(ing.ten) || '';
+          var dl = parseFloat(ing.dinhLuong) || 0;
+          var qtyPerPerson = dl;
+          if (dvt.toLowerCase() === 'kg') qtyPerPerson = dl / 1000;
+          var totalQty = qtyPerPerson * soNguoi;
+          var thanhTien = priceInfo.gia * totalQty;
+
+          var bucket = ing.nguonCung === 'Tăng gia' ? 'tanggia' : 'nhathau';
+          var key = ing.ten + '|' + dvt;
+
+          if (!map[bucket][key]) {
+            map[bucket][key] = {ten: ing.ten, dvt: dvt, gia: priceInfo.gia, days:[0,0,0,0,0,0,0], tong:0, thanhTien:0};
+          }
+          map[bucket][key].days[dayIdx] += totalQty;
+          map[bucket][key].tong += totalQty;
+          map[bucket][key].thanhTien += thanhTien;
+        });
+      });
+    });
+  });
+
+  var result = {nhathau:[], tanggia:[]};
+  for (var k in map.nhathau) result.nhathau.push(map.nhathau[k]);
+  for (var k2 in map.tanggia) result.tanggia.push(map.tanggia[k2]);
+  return result;
+}
+
+// ============ DAILY REPORT ============
+
+function renderDailyReport() {
+  var w = STATE.currentWeek;
+  var d = DAYS[STATE.currentDay];
+  var agg = aggregateDay(w, d);
+
+  var totalNT = 0, totalTG = 0;
+  agg.nhathau.forEach(function(x) { totalNT += x.thanhTien; });
+  agg.tanggia.forEach(function(x) { totalTG += x.thanhTien; });
+  var totalDay = totalNT + totalTG;
+
+  // Summary cards
+  var sc = document.getElementById('daily-summary-cards');
+  sc.innerHTML = '<div class="summary-card total"><div class="label">TỔNG DỰ TOÁN NGÀY</div><div class="value">' + fmtMoney(totalDay) + '</div></div>' +
+    '<div class="summary-card detail"><div class="sub-row"><div class="sub-item"><div class="sub-label">CHI NHÀ THẦU</div><div class="sub-value">' + fmtMoney(totalNT) + '</div></div>' +
+    '<div class="sub-item"><div class="sub-label">HẠCH TOÁN TĂNG GIA</div><div class="sub-value green">' + fmtMoney(totalTG) + '</div></div></div></div>';
+
+  // Nhà thầu table
+  renderDailyTable('daily-nhathau-tbody', agg.nhathau);
+  // Tăng gia table
+  renderDailyTable('daily-tanggia-tbody', agg.tanggia);
+}
+
+function renderDailyTable(tbodyId, items) {
+  var tbody = document.getElementById(tbodyId);
+  if (!items || items.length === 0) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="9">Không có dữ liệu</td></tr>';
+    return;
+  }
+  var html = '';
+  items.forEach(function(item, i) {
+    html += '<tr>';
+    html += '<td>' + (i+1) + '</td>';
+    html += '<td>' + escapeHtml(item.ten) + '</td>';
+    html += '<td>' + escapeHtml(item.dvt) + '</td>';
+    html += '<td class="right">' + fmtNum(item.gia) + '</td>';
+    html += '<td class="right" style="font-weight:600">' + roundQty(item.tong, item.dvt) + '</td>';
+    html += '<td class="right">' + roundQty(item.sang, item.dvt) + '</td>';
+    html += '<td class="right">' + roundQty(item.trua, item.dvt) + '</td>';
+    html += '<td class="right">' + roundQty(item.chieu, item.dvt) + '</td>';
+    html += '<td class="right price-cell">' + fmtMoney(item.thanhTien) + '</td>';
+    html += '</tr>';
+  });
+  tbody.innerHTML = html;
+}
+
+function roundQty(val, dvt) {
+  if (!val) return '0';
+  if (dvt && dvt.toLowerCase() === 'kg') return val.toFixed(3);
+  return Math.round(val).toString();
+}
+
+// ============ WEEKLY REPORT ============
+
+function renderWeeklyReport() {
+  var w = STATE.weeklyReportWeek;
+  document.getElementById('weekly-title').textContent = 'Tuần ' + w;
+  var agg = aggregateWeek(w);
+
+  var totalNT = 0, totalTG = 0;
+  agg.nhathau.forEach(function(x) { totalNT += x.thanhTien; });
+  agg.tanggia.forEach(function(x) { totalTG += x.thanhTien; });
+  var totalWeek = totalNT + totalTG;
+
+  // Summary
+  var sc = document.getElementById('weekly-summary-cards');
+  sc.innerHTML = '<div class="summary-card total"><div class="label">TỔNG DỰ TOÁN TUẦN</div><div class="value">' + fmtMoney(totalWeek) + '</div></div>' +
+    '<div class="summary-card detail"><div class="sub-row"><div class="sub-item"><div class="sub-label">CHI NHÀ THẦU</div><div class="sub-value">' + fmtMoney(totalNT) + '</div></div>' +
+    '<div class="sub-item"><div class="sub-label">HẠCH TOÁN TĂNG GIA</div><div class="sub-value green">' + fmtMoney(totalTG) + '</div></div></div></div>';
+
+  // Tables
+  renderWeeklyTable('weekly-nhathau-tbody', 'weekly-nhathau-tfoot', agg.nhathau, 'Cộng khoản Nhà Thầu:');
+  renderWeeklyTable('weekly-tanggia-tbody', 'weekly-tanggia-tfoot', agg.tanggia, 'Cộng khoản Tăng Gia:');
+}
+
+function renderWeeklyTable(tbodyId, tfootId, items, label) {
+  var tbody = document.getElementById(tbodyId);
+  var tfoot = document.getElementById(tfootId);
+  var total = 0;
+
+  if (!items || items.length === 0) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="13">Không có dữ liệu</td></tr>';
+    tfoot.innerHTML = '<tr><td colspan="12">' + label + '</td><td class="right price-cell">0</td></tr>';
+    return;
+  }
+
+  var html = '';
+  items.forEach(function(item, i) {
+    html += '<tr>';
+    html += '<td>' + (i+1) + '</td>';
+    html += '<td>' + escapeHtml(item.ten) + '</td>';
+    html += '<td>' + escapeHtml(item.dvt) + '</td>';
+    html += '<td class="right">' + fmtNum(item.gia) + '</td>';
+    html += '<td class="right" style="font-weight:600;">' + roundQty(item.tong, item.dvt) + '</td>';
+    for (var d = 0; d < 7; d++) {
+      html += '<td class="right">' + roundQty(item.days[d], item.dvt) + '</td>';
+    }
+    html += '<td class="right price-cell">' + fmtMoney(item.thanhTien) + '</td>';
+    html += '</tr>';
+    total += item.thanhTien;
+  });
+  tbody.innerHTML = html;
+  tfoot.innerHTML = '<tr><td colspan="12" style="text-align:right;">' + label + '</td><td class="right price-cell">' + fmtMoney(total) + '</td></tr>';
+}
+
+// ============ PRINT ============
+function printDailyReport() { window.print(); }
+function printWeeklyReport() { window.print(); }
+
+// ============ EXCEL EXPORT ============
+
+function exportWeeklyExcel() {
+  try {
+    var w = STATE.weeklyReportWeek;
+    var agg = aggregateWeek(w);
+
+    // Use xlsx-js-style (XLSX_STYLE) or fallback to XLSX
+    var XLS = (typeof XLSX_STYLE !== 'undefined') ? XLSX_STYLE : XLSX;
+    var wb = XLS.utils.book_new();
+
+    var headerStyle = {
+      font: {bold: true, color: {rgb: 'FFFFFF'}, sz: 11},
+      fill: {fgColor: {rgb: '2E4057'}},
+      border: {top:{style:'thin'}, bottom:{style:'thin'}, left:{style:'thin'}, right:{style:'thin'}},
+      alignment: {horizontal: 'center', vertical: 'center'}
+    };
+    var cellStyle = {
+      border: {top:{style:'thin'}, bottom:{style:'thin'}, left:{style:'thin'}, right:{style:'thin'}},
+      alignment: {vertical: 'center'}
+    };
+    var numStyle = {
+      border: {top:{style:'thin'}, bottom:{style:'thin'}, left:{style:'thin'}, right:{style:'thin'}},
+      alignment: {horizontal: 'right'},
+      numFmt: '#,##0'
+    };
+    var totalStyle = {
+      font: {bold: true, sz: 12},
+      border: {top:{style:'thin'}, bottom:{style:'thin'}, left:{style:'thin'}, right:{style:'thin'}},
+      alignment: {horizontal: 'right'},
+      numFmt: '#,##0'
+    };
+    var titleStyle = {
+      font: {bold: true, sz: 14, color: {rgb: '2E4057'}},
+      alignment: {horizontal: 'center'}
+    };
+
+    // Build data rows
+    var data = [];
+
+    // Title
+    data.push([{v:'BẢNG KÊ TUẦN ' + w, s: titleStyle}]);
+    data.push([]);
+
+    function addSection(title, items) {
+      data.push([{v: title, s: {font:{bold:true, sz:12, color:{rgb:'2E7D32'}}}}]);
+      // Header row 1
+      data.push([
+        {v:'STT', s:headerStyle}, {v:'Tên Thực Phẩm', s:headerStyle}, {v:'ĐVT', s:headerStyle},
+        {v:'Đơn Giá', s:headerStyle}, {v:'TỔNG', s:headerStyle},
+        {v:'T.Hai', s:headerStyle}, {v:'T.Ba', s:headerStyle}, {v:'T.Tư', s:headerStyle},
+        {v:'T.Năm', s:headerStyle}, {v:'T.Sáu', s:headerStyle}, {v:'T.Bảy', s:headerStyle},
+        {v:'CN', s:headerStyle}, {v:'Thành Tiền', s:headerStyle}
+      ]);
+
+      var sectionTotal = 0;
+      if (items.length === 0) {
+        data.push([{v:'Không có dữ liệu', s:cellStyle},'','','','','','','','','','','','']);
+      } else {
+        items.forEach(function(item, i) {
+          data.push([
+            {v: i+1, s:cellStyle}, {v: item.ten, s:cellStyle}, {v: item.dvt, s:cellStyle},
+            {v: item.gia, t:'n', s:numStyle}, {v: Math.round(item.tong*1000)/1000, t:'n', s:numStyle},
+            {v: Math.round(item.days[0]*1000)/1000, t:'n', s:numStyle},
+            {v: Math.round(item.days[1]*1000)/1000, t:'n', s:numStyle},
+            {v: Math.round(item.days[2]*1000)/1000, t:'n', s:numStyle},
+            {v: Math.round(item.days[3]*1000)/1000, t:'n', s:numStyle},
+            {v: Math.round(item.days[4]*1000)/1000, t:'n', s:numStyle},
+            {v: Math.round(item.days[5]*1000)/1000, t:'n', s:numStyle},
+            {v: Math.round(item.days[6]*1000)/1000, t:'n', s:numStyle},
+            {v: Math.round(item.thanhTien), t:'n', s:numStyle}
+          ]);
+          sectionTotal += item.thanhTien;
+        });
+      }
+      data.push(['','','','','','','','','','','','', {v: Math.round(sectionTotal), t:'n', s:totalStyle}]);
+      data.push([]);
+      return sectionTotal;
+    }
+
+    var nt = addSection('I. BẢO ĐÀM NHÀ THẦU', agg.nhathau);
+    var tg = addSection('II. TỰ KHAI THÁC, TĂNG GIA', agg.tanggia);
+
+    data.push([{v:'TỔNG DỰ TOÁN TUẦN:', s:{font:{bold:true,sz:13}}}, '','','','','','','','','','','', {v:Math.round(nt+tg), t:'n', s:totalStyle}]);
+
+    var ws = XLS.utils.aoa_to_sheet(data);
+
+    // Column widths
+    ws['!cols'] = [
+      {wch:5}, {wch:25}, {wch:8}, {wch:12}, {wch:10},
+      {wch:9}, {wch:9}, {wch:9}, {wch:9}, {wch:9}, {wch:9}, {wch:9}, {wch:14}
+    ];
+
+    // Merge title
+    ws['!merges'] = [{s:{r:0,c:0}, e:{r:0,c:12}}];
+
+    XLS.utils.book_append_sheet(wb, ws, 'Bảng kê tuần ' + w);
+    XLS.writeFile(wb, 'BangKe_Tuan' + w + '.xlsx');
+    showToast('Đã xuất file Excel thành công!', 'success');
+  } catch(err) {
+    showToast('Lỗi xuất Excel: ' + err.message, 'error');
+    console.error(err);
+  }
+}
+</script>
